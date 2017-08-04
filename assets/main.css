@@ -1,3 +1,40 @@
-body {
-    padding: 0;
+/* 
+ * General
+ */
+
+body, html, p {
+    color: #757575;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+/*
+ * Class 
+ */
+
+.banner-header {
+    position: absolute;
+    margin-top: 0;
+    top: 0!important;
+    left: 0;
+    z-index: 10000;
+    background-color: #333;
+    padding: 0 30px;
+    min-height: 60px;
+}
+
+.section-main {
+    background-color: rgba(34,34,34,.8);
+}
+
+.banner-text {
+    padding-top: 142px;
+    padding-bottom: 85px;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 0!important;
+}
+
+.main-header {
+    width: 100%;
 }
