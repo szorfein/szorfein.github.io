@@ -16,7 +16,7 @@
 title: szorfein blog
 email: szorfein@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-    Somes howto for Unix :>.
+    Some Howtos for Unix >_
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://szorfein.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: szorfein

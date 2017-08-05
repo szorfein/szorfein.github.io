@@ -1,0 +1,10 @@
+- name: Linux
+  post: 
+    - title: linux_post1 
+    - title: linux_post2
+    - title: linux_post3
+
+- name: Ruby
+  post: 
+    - title: ruby_post
+    - title: ruby_post2 

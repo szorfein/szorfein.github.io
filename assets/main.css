@@ -23,6 +23,7 @@ body, html, p {
 .section-main {
     background-image: url("/assets/imgs/bg.jpg");
     background-repeat: no-repeat;
+    height: 310px;
 }
 
 .banner-text {

@@ -1,0 +1,19 @@
+---
+layout: home
+permalink: /blog/
+---
+
+<div class="container-fluid">
+    <div class="row">
+        {% for article in site.data.articles %}
+        <div class="col">
+            <div class="card">
+            {{ article.title }}
+            {{ article.description }}
+            {{ article.image-url }}
+            {{ site.url }} {{ article.url }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

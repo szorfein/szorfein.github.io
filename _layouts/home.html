@@ -1,0 +1,45 @@
+---
+layout: index
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-8">
+            {{ content }}
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <h1>recent post</h1>
+            <ul>
+                {% for tag in site.data.tags %}
+                <li>
+                    <a href="#">
+                        {{ tag.name }} 
+                    </a>
+                    {{ tag.length }}
+                    <ul>
+                        {% for post in tag['post'] %}
+                        <li>
+                            <a href="#">
+                                {{ post.title | escape }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            <h1>categories</h1>
+            <ul>
+                {% for post in site.posts %}
+                <li>
+                    <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h1>archive</h1>
+
+            <h1>tags</h1>
+        </div>
+    </div>
+</div>

@@ -5,13 +5,13 @@
             <section class="social-tab navbar-toggler-right">
                 <ul class="nav justify-content-end">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Blog</a>
+                        <a class="nav-link active" href="{{ site.url }}/blog/">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="{{ site.url }}/about/">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="{{ site.url }}/contact/">Contact</a>
                     </li>
                 </ul>
             </section>
@@ -19,8 +19,13 @@
         <section class="section-main jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="banner-text">
+                    {% if page.title %}
+                    <h2>{{ page.title }}</h2>
+                    <p>{{ site.github_username }} | {{ page.date }} | {{ page.categories[0] | '' }}</p>
+                    {% else %}
                     <h2>{{ site.title }}</h2>
-                    <h3>{{ site.description }}</h3>
+                    <p>{{ site.description }}</p>
+                    {% endif %}
                 </div>
             </div>
         </section>
