@@ -20,10 +20,12 @@
             <div class="container">
                 <div class="banner-text">
                     {% if page.title %}
-                    <h2>{{ page.title }}</h2>
+                    <h2 class="display-4">{{ page.title }}</h2>
+                    <hr class="my-4">
                     <p>{{ site.github_username }} | {{ page.date }} | {{ page.categories[0] | '' }}</p>
                     {% else %}
-                    <h2>{{ site.title }}</h2>
+                    <h2 class="display-4">{{ site.title }}</h2>
+                    <hr class="my-4">
                     <p>{{ site.description }}</p>
                     {% endif %}
                 </div>
