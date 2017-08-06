@@ -1,6 +1,6 @@
 - name: Linux
   post: 
-    - title: linux_post1 
+    - title: Use vim with gpg
     - title: linux_post2
     - title: linux_post3
 

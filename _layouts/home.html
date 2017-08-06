@@ -5,10 +5,10 @@ layout: index
 <div class="container">
     <div class="row">
 
-        <div class="col-sm-8 col-md-8">
+        <div class="col-sm-6 col-md-8">
             {{ content }}
         </div>
-        <div class="col-sm-4 col-md-4">
+        <div class="col-sm-6 col-md-4">
             <h1 class="title">recent post</h1>
             <ul class="nav flex-column">
                 {% for post in site.posts %}
@@ -25,7 +25,6 @@ layout: index
                     <a href="#">
                         {{ tag.name }} 
                     </a>
-                    {{ tag.length }}
                     <ul class="nav flex-column">
                         {% for post in tag['post'] %}
                         <li class="nav-item">
@@ -42,6 +41,11 @@ layout: index
             <h1 class="title">archive</h1>
 
             <h1 class="title">tags</h1>
+            <h3>
+                {% for tag in site.data.tags %}
+                <a href="{{ site.url }}/tags"><span class="badge badge-default">{{ tag.name }} ({{ tag.post.size }})</span></a>
+                {% endfor %}
+            </h3>
         </div>
     </div>
 </div>
