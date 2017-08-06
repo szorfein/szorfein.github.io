@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+
 <div class="container">
 
     <h2 class="text-center btitle">Last desktop</h2>
@@ -12,16 +13,16 @@ layout: default
             {% include portfolio.html title=imgTitle link=imgLink %}
         </div>
         {% endfor %}
-        </div>
     </div>
 
     <h2 class="text-center btitle">Last article</h2>
     <div class="row">
-        <div class="col">
-        {% for post in site.posts limit:5 %}
-
-        {% endfor %}
+        {% for post in site.posts limit:3 %}
+        <div class="col-md-4">
+            {% capture postTitle %}{{ post.title }}{% endcapture %}
+            {% include post.html title=postTitle %}
         </div>
+        {% endfor %}
     </div>
 
 </div>

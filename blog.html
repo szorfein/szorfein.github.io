@@ -1,22 +1,4 @@
 ---
-layout: home
+layout: sidebar
 permalink: /blog/
 ---
-
-<div class="container-fluid">
-    <div class="row">
-        {% for article in site.data.articles %}
-        <div class="col">
-            <div class="card">
-                <img class="card-img-top" src="{{ article.image-url }}">
-                <div class="card-block">
-                    <h4 class="card-title">
-                        <a href="{{ site.url }}{{ article.url }}">{{ article.title }}</a>
-                    </h4>
-                    <p class="card-text">{{ article.description }}</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
