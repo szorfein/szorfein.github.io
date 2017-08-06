@@ -9,7 +9,7 @@ layout: default
                 <div class="row">
                     {% for post in site.posts %}
                     {% capture postTitle %}{{ post.title }}{% endcapture %}
-                    <div class="col">
+                    <div class="col-sm-6 col-md-6">
                         {% include post.html title=postTitle %}
                     </div>
                     {% endfor %}

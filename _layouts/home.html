@@ -3,26 +3,36 @@ layout: default
 ---
 
 <div class="container">
-
-    <h2 class="text-center btitle">Last desktop</h2>
-    <div class="row">
-        {% for portfolio in site.data.portfolios limit:2 %}
-        <div class="col-md-6">
-            {% capture imgLink %}{{ portfolio.url[0].link }}{% endcapture %}
-            {% capture imgTitle %}{{ portfolio.title }}{% endcapture %}
-            {% include portfolio.html title=imgTitle link=imgLink %}
+    <div class="section-common">
+        <h2 class="text-center btitle">Last desktop</h2>
+        <div class="row">
+            {% for portfolio in site.data.portfolios limit:2 %}
+            <div class="col-md-6">
+                {% capture imgLink %}{{ portfolio.url[0].link }}{% endcapture %}
+                {% capture imgTitle %}{{ portfolio.title }}{% endcapture %}
+                {% include portfolio.html title=imgTitle link=imgLink %}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-
-    <h2 class="text-center btitle">Last article</h2>
-    <div class="row">
-        {% for post in site.posts limit:3 %}
-        <div class="col-md-4">
-            {% capture postTitle %}{{ post.title }}{% endcapture %}
-            {% include post.html title=postTitle %}
+        <div class="text-center">
+            <a class="btn btn-primary" href="#" role="button">View All</a>
         </div>
-        {% endfor %}
     </div>
+</div>
 
+<div class="container">
+    <div class="section-common">
+        <h2 class="text-center btitle">Blog post</h2>
+        <div class="row">
+            {% for post in site.posts limit:3 %}
+            <div class="col-md-4">
+                {% capture postTitle %}{{ post.title }}{% endcapture %}
+                {% include post.html title=postTitle %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <a class="btn btn-primary" href="{{ site.url }}/blog/" role="button">View All</a>
+        </div>
+    </div>
 </div>

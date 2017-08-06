@@ -65,7 +65,7 @@ body, html, p {
     font-size: 25px;
     color: #333;
     text-transform: uppercase;
-    margin: 0 0 23px;
+    margin: 0 0 48px;
 }
 
 .bg_dark {
@@ -95,4 +95,9 @@ body, html, p {
     font-size: 9px;
     text-transform: uppercase;
     color: #6e6e6e;
+}
+
+.section-common {
+    padding-top: 43px;
+    padding-bottom: 48px;
 }
