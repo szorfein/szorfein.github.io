@@ -60,6 +60,14 @@ body, html, p {
     margin-top: 6px;
 }
 
+.btitle {
+    font-weight: 700;
+    font-size: 25px;
+    color: #333;
+    text-transform: uppercase;
+    margin: 0 0 23px;
+}
+
 .bg_dark {
     background-color: #333;
     color: #ede;

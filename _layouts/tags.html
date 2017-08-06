@@ -1,0 +1,30 @@
+---
+layout: default
+---
+
+<ul>
+{% for tag in site.data.tags %}
+<li>
+    <a href="#{{ tag.name }}">{{ tag.name }}<span>({{ tag.post.size }})</span></a>
+</li>
+{% endfor %}
+</ul>
+
+{% for tag in site.data.tags %}
+<h1 id="{{ tag.name }}">{{ tag.name }}</h1>
+<ul>
+    {% for post in tag['post'] %}
+
+    {% for article in site.data.articles %}
+    {% if article.title == post.title %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ site.url }}{{ article.url }}">
+            {{ article.title }}
+        </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% endfor %}
+</ul>
+{% endfor %}
