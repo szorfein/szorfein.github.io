@@ -101,3 +101,9 @@ body, html, p {
     padding-top: 43px;
     padding-bottom: 48px;
 }
+
+.nav-typo ul li a {
+    font-weight: 700;
+    line-height: 1.9;
+    text-transform: uppercase;
+}
