@@ -7,3 +7,34 @@
   description: "blabla about jekyll"
   image-url: "https://i.imgur.com/BeNfhkSg.png"
   url: /jekyll/update/welcome-to-jekyll/
+
+- title: "False Post1"
+  description: "false post 1"
+  image-url: ""
+  url: /false-post1/
+
+- title: "False Post2"
+  description: "false post 2"
+  image-url: ""
+  url: /false-post2/
+
+- title: "False Post3"
+  description: "false post 3"
+  image-url: ""
+  url: /false-post3/
+
+- title: "False Post4"
+  description: "false post 4"
+  image-url: ""
+  url: /false-post4/
+
+- title: "False Post5"
+  description: "false post 5"
+  image-url: ""
+  url: /false-post5/
+
+- title: "False Post6"
+  description: "false post 6"
+  image-url: ""
+  url: /false-post6/
+

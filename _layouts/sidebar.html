@@ -7,7 +7,7 @@ layout: default
         <div class="col-sm-7 col-md-8">
             <div class="container-fluid">
                 <div class="row">
-                    {% for post in site.posts %}
+                    {% for post in paginator.posts %}
                     {% capture postTitle %}{{ post.title }}{% endcapture %}
                     <div class="col-sm-6 col-md-6">
                         {% include post.html title=postTitle %}
@@ -15,11 +15,29 @@ layout: default
                     {% endfor %}
                 </div>
             </div>
+            <div class="row">
+                <nav aria-label="pagination">
+                    {% if paginator.total_pages > 1 %}
+                    <ul class="pagination justify-content-center">
+                        {% if paginator.previous_page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
+                        </li>
+                        {% endif %}
+                        {% if paginator.next_page %}
+                        <li class="page-item next">
+                            <a class="page-link" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+                </nav>
+            </div>
         </div>
         <div class="col-sm-5 col-md-4">
             <h1 class="title">recent post</h1>
             <ul class="nav flex-column">
-                {% for post in site.posts %}
+                {% for post in site.posts limit:5 %}
                 <li class="nav-item">
                     <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
                 </li>

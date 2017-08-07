@@ -35,6 +35,16 @@ kramdown:
     hard_wrap: false
 
 permalink: /:categories/:title/
+gems:
+    - jekyll-paginate-v2
+
+pagination:
+    enabled: true
+    per_page: 4
+    permalink: '/page/:num/'
+    title: ':title - page :num of :max'
+    sort_reverse: true
+
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
