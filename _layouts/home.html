@@ -6,16 +6,18 @@ layout: default
     <div class="section-common">
         <h2 class="text-center btitle">Last desktop</h2>
         <div class="row">
-            {% for portfolio in site.data.portfolios limit:2 %}
-            <div class="col-md-6">
-                {% capture imgLink %}{{ portfolio.url[0].link }}{% endcapture %}
-                {% capture imgTitle %}{{ portfolio.title }}{% endcapture %}
-                {% include portfolio.html title=imgTitle link=imgLink %}
+            {% assign desktops = site.desktops | date_sort | reverse %}
+            {% for desk in desktops limit:2 %}
+            <div class="col-sm-12 col-md-6">
+                {% capture imgLink %}{{ desk.link[0].img }}{% endcapture %}
+                {% capture imgTitle %}{{ desk.title }}{% endcapture %}
+                {% capture url %}{{ site.url}}{{ desk.url }}{% endcapture %}
+                {% include portfolio.html title=imgTitle link=imgLink url=url %}
             </div>
             {% endfor %}
         </div>
         <div class="text-center">
-            <a class="btn btn-primary" href="#" role="button">View All</a>
+            <a class="btn btn-primary" href="{{ site.url }}/desktops/" role="button">View All</a>
         </div>
     </div>
 </div>

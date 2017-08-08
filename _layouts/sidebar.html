@@ -46,18 +46,22 @@ layout: default
 
             <h1 class="title">categories</h1>
             <ul>
-                {% for tag in site.data.tags %}
+                {% for tag in site.data.tags limit:5 %}
                 <li>
-                    <a href="#">
+                    <a href="{{ site.url }}/tags/">
                         {{ tag.name }} 
                     </a>
                     <ul class="nav flex-column">
-                        {% for post in tag['post'] %}
+                        {% for post in tag['post'] limit:4 %}
+                        {% for rp in site.posts %}
+                        {% if rp.title == post.title %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ rp.url }}">
                                 {{ post.title | escape }}
                             </a>
                         </li>
+                        {% endif %}
+                        {% endfor %}
                         {% endfor %}
                     </ul>
                 </li>
@@ -69,7 +73,7 @@ layout: default
             <h1 class="title">tags</h1>
             <h3>
                 {% for tag in site.data.tags %}
-                <a href="{{ site.url }}/tags"><span class="badge badge-default">{{ tag.name }} ({{ tag.post.size }})</span></a>
+                <a href="{{ site.url }}/tags/"><span class="badge badge-default">{{ tag.name }} ({{ tag.post.size }})</span></a>
                 {% endfor %}
             </h3>
         </div>
