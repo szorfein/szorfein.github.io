@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        {% for i in page.link %}
+        <div class="card mb-4">
+            <img class="card-img" src="{{ i.img }}">
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="col">
+        <h1 class="btitle">wm</h1>
+        <p>{{ page.wm }}</p>
+        <h1 class="btitle">font-terminal</h1>
+        <p>{{ page.font-terminal }}</p>
+        <h1 class="btitle">font-desktop</h1>
+        <p>{{ page.font-desktop }}</p>
+        <h1 class="btitle">terminal</h1>
+        <p>{{ page.terminal }}</p>
+        <h1 class="btitle">wallpaper</h1>
+        <p>{{ page.wallpaper }}</p>
+    </div>
+</div>

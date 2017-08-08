@@ -9,12 +9,3 @@
 - name: Gpg 
   post: 
     - title: Use vim with gpg
-
-- name: Fake
-  post: 
-    - title: "False Post1"
-    - title: "False Post2"
-    - title: "False Post3"
-    - title: "False Post4"
-    - title: "False Post5"
-    - title: "False Post6"
