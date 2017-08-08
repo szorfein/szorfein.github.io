@@ -13,7 +13,7 @@ body, html, p {
  */
 
 .grey {
-    color: #757575;
+    color: #c7c7c7;
 }
 
 .banner-header {
@@ -53,11 +53,11 @@ body, html, p {
 
 .title {
     font-weight: 700;
-    font-size: 18px;
-    line-height: 1.5;
+    font-size: 17px;
+    line-height: 1.7;
     margin-bottom: 19px;
     color: #333;
-    margin-top: 6px;
+    text-transform: uppercase;
 }
 
 .btitle {
@@ -70,7 +70,6 @@ body, html, p {
 
 .bg_dark {
     background-color: #333;
-    color: #ede;
 }
 
 .bg_dark a {
@@ -106,4 +105,90 @@ body, html, p {
     font-weight: 700;
     line-height: 1.9;
     text-transform: uppercase;
+}
+
+.social li a {
+    height: 40px;
+    line-height: 23px;
+    border-radius: 50%;
+    background-color: #383838;
+    font-size: 18px;
+    margin: 0 5px;
+}
+
+.dark {
+    color: #eee;
+}
+
+.dark a {
+    color: #eee;
+}
+
+.dark a:hover {
+    color: #b94374!important;
+}
+
+.dark a:active {
+    color: #eee;
+}
+
+.dark a:visited {
+    color: #eee;
+}
+
+.dark a:link {
+    color: #eee;
+}
+
+.light {
+    color: #444;
+    text-decoration: none;
+}
+
+.light a {
+    color: #444;
+}
+
+.light a:hover {
+    color: #b94374!important;
+}
+
+.light a:active {
+    color: #444;
+}
+
+.light a:visited {
+    color: #444;
+}
+
+.light a:link {
+    color: #444;
+}
+
+.btn-primary {
+    background-color: #336f6c!important;
+    border-color: #3fccc4!important;
+}
+
+.btn-primary:hover {
+    background-color: #438e8a!important;
+    border-color: #3fccc4!important;
+    color: #fff!important;
+}
+
+.card-title a {
+    text-transform: uppercase;
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.card-title a:hover {
+    color: #b94374!important;
+    text-decoration: none!important;
+}
+
+.widget {
+    margin-bottom: 1.5rem;
 }
