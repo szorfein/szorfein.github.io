@@ -122,10 +122,12 @@ body, html, p {
 
 .dark a {
     color: #eee;
+    text-decoration: none;
 }
 
 .dark a:hover {
     color: #b94374!important;
+    text-decoration: none;
 }
 
 .dark a:active {
