@@ -1,0 +1,10 @@
+---
+layout: post
+---
+
+{% for i in site.desktops %}
+<p>{{ i.title }}</p>
+<p>url: <a href="{{ site.url }}{{ i.url }}">{{ i.title }}</a></p>
+<p>Date {{ i.date  }}</p>
+<p>panel {% if i.panel %}<p> {{ i.panel }} </p> {% endif %}</p>
+{% endfor %}
