@@ -3,7 +3,8 @@
   image-url: "https://i.imgur.com/wLSWbEy.png"
   url: /linux/vim/gpg/vim-gpg/
 
-- title: "Welcome to Jekyll!"
-  description: "blabla about jekyll"
-  image-url: "https://i.imgur.com/BeNfhkSg.png"
-  url: /jekyll/update/welcome-to-jekyll/
+- title: Build a secure GPG key
+  description: build a secure gpg key
+  image-url: https://cdn.pixabay.com/photo/2016/03/31/17/58/computer-1294045_960_720.png
+  url: /gpg/build-secure-gpg-key/
+
