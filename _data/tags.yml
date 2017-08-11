@@ -1,11 +1,19 @@
-- name: Linux
-  post: 
-    - title: Use vim with gpg
-
 - name: Vim 
   post: 
-    - title: Use vim with gpg
+    - title: vim and gpg with gnupg
 
 - name: Gpg 
   post: 
-    - title: Use vim with gpg
+    - title: vim and gpg with gnupg
+    - title: Build a secure GPG key
+
+- name: Password
+  post: 
+    - title: vim and gpg with gnupg
+    - title: Build a secure GPG key
+
+- name: Crypt
+  post: 
+    - title: vim and gpg with gnupg
+    - title: Build a secure GPG key
+

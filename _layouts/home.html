@@ -43,7 +43,10 @@ layout: default
             {% for post in site.posts limit:3 %}
             <div class="col-md-4">
                 {% capture postTitle %}{{ post.title }}{% endcapture %}
-                {% include post.html title=postTitle %}
+                {% capture postImageUrl %}{{ post.img-url }}{% endcapture %}
+                {% capture postUrl %}{{ post.url }}{% endcapture %}
+                {% capture postDesc %}{{ post.description }}{% endcapture %}
+                {% include post.html title=postTitle image=postImageUrl url=postUrl description=postDesc %}
             </div>
             {% endfor %}
         </div>

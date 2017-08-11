@@ -9,8 +9,11 @@ layout: default
                 <div class="row">
                     {% for post in paginator.posts %}
                     {% capture postTitle %}{{ post.title }}{% endcapture %}
+                    {% capture postImageUrl %}{{ post.img-url }}{% endcapture %}
+                    {% capture postUrl %}{{ post.url }}{% endcapture %}
+                    {% capture postDesc %}{{ post.description }}{% endcapture %}
                     <div class="col-sm-6 col-md-6">
-                        {% include post.html title=postTitle %}
+                        {% include post.html title=postTitle image=postImageUrl url=postUrl description=postDesc %}
                     </div>
                     {% endfor %}
                 </div>
