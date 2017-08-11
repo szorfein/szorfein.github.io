@@ -4,7 +4,7 @@ title: Build a secure GPG key
 date: 2017-08-08
 categories: gpg
 description: How build a secure gpg keypair.
-img-url: ''
+img-url: https://i.imgur.com/IEhmnGkl.jpg 
 comments: true
 ---
 
