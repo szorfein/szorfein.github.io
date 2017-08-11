@@ -18,5 +18,9 @@
         <p>{{ page.terminal }}</p>
         <h1 class="title">wallpaper</h1>
         <p>{{ page.wallpaper }}</p>
+        {% if include.color %}
+        <h1 class="title">colors</h1>
+        <p>{{ include.color }}</p>
+        {% endif %}
     </div>
 </div>

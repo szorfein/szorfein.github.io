@@ -2,8 +2,9 @@
 layout: default
 ---
 
+{% capture pageContent %} {{ page.content }} {% endcapture %}
 <div class="container">
-    {% include portfolio-detail.html %}
+    {% include portfolio-detail.html color=pageContent %}
 </div>
 
 <div class="container">
