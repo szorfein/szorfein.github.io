@@ -48,12 +48,7 @@ collections:
         permalink: /:collection/:path/
 
 kramdown:
-    auto_ids: true
-    enable_coderay: false
-    syntax_highlighter: rouge
-    syntax_highlighter_opts:
-        default_lang: text
-        css_class:
+    input: GFM
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

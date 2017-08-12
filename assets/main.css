@@ -194,3 +194,31 @@ body, html, p {
 .widget {
     margin-bottom: 1.5rem;
 }
+
+.main-markdown pre {
+    padding: 2em 17px;
+    background-color: rgba(232,228,228,.45);
+    line-height: 1.4rem;
+}
+
+.main-markdown h3 {
+    margin-top: 1.4rem;
+    color: #808080;
+}
+
+.main-markdown p {
+    margin: 1.4rem 0;
+    text-align: justify;
+}
+
+.main-markdown a {
+    color: #444;
+}
+
+.main-markdown a:hover {
+    color: #b94374!important;
+}
+
+.navbar-toggler-right {
+    top: 2px;
+}

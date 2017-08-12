@@ -46,4 +46,14 @@ link:
 ! White
 *color7:  #d4b9d7
 *color15: #fbdeff
+
+! rofi
+rofi.lines:           6
+rofi.color-enabled:   true
+rofi.separator-style: none 
+rofi.width:           40
+rofi.color-normal:    argb:00000000, #8b4779, argb:00000000, #16101b,#ffffff
+rofi.color-urgent:    argb:00000000, #8b4779, argb:00000000, #16101b,#ffffff
+rofi.color-active:    argb:00000000, #8b4779, argb:00000000, #16101b,#ffffff
+rofi.color-window:    argb:ee0f0a13, #000,#fbdeff
 ```
