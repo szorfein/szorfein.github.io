@@ -11,8 +11,8 @@ terminal: termite
 date: 2017-03-18
 wallpaper: ''
 link:
-    - img: https://i.imgur.com/wLSWbEy.png
-    - img: https://i.imgur.com/NvT1SlT.png
-    - img: https://i.imgur.com/whSV89y.png
-    - img: https://i.imgur.com/6z3Fp49.png
+    - img: https://i.imgur.com/wLSWbEyl.png
+    - img: https://i.imgur.com/NvT1SlTl.png
+    - img: https://i.imgur.com/whSV89yl.png
+    - img: https://i.imgur.com/6z3Fp49l.png
 ---

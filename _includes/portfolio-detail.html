@@ -1,8 +1,10 @@
 <div class="row">
-    <div class="col-sm-12 col-md-8">
+    <div class="col-sm-12 col-md-12 col-lg-7">
         {% for i in page.link %}
         <div class="card mb-4">
-            <img class="card-img" src="{{ i.img }}">
+            <a href="{{ i.img }}">
+                <img class="card-img" src="{{ i.img }}">
+            </a>
         </div>
         {% endfor %}
     </div>
@@ -17,7 +19,7 @@
         <h1 class="title">terminal</h1>
         <p>{{ page.terminal }}</p>
         <h1 class="title">wallpaper</h1>
-        <p>{{ page.wallpaper }}</p>
+        <p><a href="{{ page.wallpaper }}">{{ page.wallpaper }}</a></p>
         {% if include.color %}
         <h1 class="title">colors</h1>
         <p>{{ include.color }}</p>

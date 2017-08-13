@@ -11,10 +11,10 @@ terminal: termite
 date: 2017-04-09
 wallpaper: https://i.imgur.com/weYSXtX.jpg
 link:
-    - img: https://i.imgur.com/b7Fw86v.png
-    - img: https://i.imgur.com/iUUFal9.png
-    - img: https://i.imgur.com/iQlKnxU.png
-    - img: https://i.imgur.com/trbaRdR.png
+    - img: https://i.imgur.com/b7Fw86vl.png
+    - img: https://i.imgur.com/iUUFal9l.png
+    - img: https://i.imgur.com/iQlKnxUl.png
+    - img: https://i.imgur.com/trbaRdRl.png
 ---
 
 ```sh
