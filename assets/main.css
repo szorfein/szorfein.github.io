@@ -199,8 +199,6 @@ body, html, p {
     padding: 2em 17px;
     background-color: rgba(232,228,228,.45);
     line-height: 1.4rem;
-    width: 23rem;
-    overflow: auto;
 }
 
 .main-markdown h3 {
@@ -223,4 +221,16 @@ body, html, p {
 
 .navbar-toggler-right {
     top: 2px;
+}
+
+@media (min-width: 992px) {
+    .md-desktop pre {
+        width: 23rem;
+    }
+}
+
+@media (min-width: 1140px) {
+    .md-desktop pre {
+        width: 27rem;
+    }
 }
