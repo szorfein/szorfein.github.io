@@ -13,8 +13,8 @@ wallpaper: http://i.imgur.com/vHtbVQ9.jpg
 link:
     - img: https://i.imgur.com/qGwIcggl.png
     - img: https://i.imgur.com/SU9ugW4l.png
-    - img: https://i.imgur.com/AyQcGXOl.png
-    - img: https://i.imgur.com/Y34Fjxal.png
+    - img: https://i.imgur.com/XZOKWVZl.png
+    - img: https://i.imgur.com/un7kbUEl.png
 ---
 
 ```sh

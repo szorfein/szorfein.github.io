@@ -17,3 +17,7 @@
     - title: vim and gpg with gnupg
     - title: Build a secure GPG key
 
+- name: Tor
+  post: 
+    - title: weechat + Tor + SASL
+
