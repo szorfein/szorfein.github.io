@@ -7,7 +7,7 @@ description: Configure weechat with tor+SASL & secure password
 img-url: https://i.imgur.com/XZOKWVZm.png
 ---
 
-### First create a set of password with weechat !
+### First create a set of secure data with weechat !
 ---
 you can use `pwgen -sy 24 1` for generate password, thing than u need this password all time you start weechat (copy/paste :)).
 Use you real email, it will be use if you forget password.
@@ -19,21 +19,15 @@ Use you real email, it will be use if you forget password.
 /secure set freenodeMail newUserMail@example.com
 ```
 
-### Register an account to freenode if not (freenode block tor traffic else...)
+### Create freenode server for weechat and create an account. 
 ---
 Into weechat.
 ```
 /server add freenode chat.freenode.net/6697 -ssl -autoconnect
 /connect freenode
 /msg NickServ REGISTER "${sec.data.freenodePass}" "${sec.data.freenodeMail}"
-```
-
-### Create freenode server for weechat and log in
----
-```
-/server add freenode chat.freenode.net/6697 -ssl -autoconnect
-/connect freenode
 /msg NickServ IDENTIFY "${sec.data.freenodeUser}" "${sec.data.freenodePass}"
+/msg NickServ GROUP
 ```
 
 ### SASL auth with [ecdsatool](https://github.com/kaniini/ecdsatool).
@@ -55,6 +49,7 @@ in weechat.
 /msg nickserv set pubkey Av8k1FOGetUDq7sPMBfufSIZ5c2I/QYWgiwHtNXkVe
 /set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
 /set irc.server.freenode.sasl_username "${sec.data.freenodeUser}"
+/set irc.server.freenode.sasl_password "${sec.data.freenodePass}"
 /set irc.server.freenode.sasl_key "%h/ecdsa.pem"
 /reconnect freenode
 ```
