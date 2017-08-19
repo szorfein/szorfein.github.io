@@ -33,7 +33,7 @@ Into weechat.
 ```
 /server add freenode chat.freenode.net/6697 -ssl -autoconnect
 /connect freenode
-/msg NickServ IDENTIFY "${sec.data.secureUser}" "${sec.data.securePasswd}"
+/msg NickServ IDENTIFY "${sec.data.freenodeUser}" "${sec.data.freenodePass}"
 ```
 
 ### SASL auth with [ecdsatool](https://github.com/kaniini/ecdsatool).
@@ -54,7 +54,7 @@ in weechat.
 ```
 /msg nickserv set pubkey Av8k1FOGetUDq7sPMBfufSIZ5c2I/QYWgiwHtNXkVe
 /set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
-/set irc.server.freenode.sasl_username "your_nickname"
+/set irc.server.freenode.sasl_username "${sec.data.freenodeUser}"
 /set irc.server.freenode.sasl_key "%h/ecdsa.pem"
 /reconnect freenode
 ```
