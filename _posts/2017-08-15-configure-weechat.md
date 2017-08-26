@@ -5,6 +5,7 @@ date: 2017-08-19
 categories: weechat tor
 description: Configure weechat with tor+SASL & secure password
 img-url: https://i.imgur.com/XZOKWVZm.png
+comments: true
 ---
 
 ### First create a set of secure data with weechat !
@@ -44,12 +45,11 @@ $ openssl ec -noout -text -conv_form compressed -in ~/.weechat/ecdsa.pem | \
 grep '^pub:' -A 3 | tail -n 3 | tr -d ' \n:' | xxd -r -p | base64
 ```
 
-in weechat.
+In weechat, (we don't need define variable sasl_password here)
 ```
 /msg nickserv set pubkey Av8k1FOGetUDq7sPMBfufSIZ5c2I/QYWgiwHtNXkVe
 /set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
 /set irc.server.freenode.sasl_username "${sec.data.freenodeUser}"
-/set irc.server.freenode.sasl_password "${sec.data.freenodePass}"
 /set irc.server.freenode.sasl_key "%h/ecdsa.pem"
 /reconnect freenode
 ```

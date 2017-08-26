@@ -1,9 +1,15 @@
-<div class="card mb-5">
+<div class="post card mb-5">
     <img class="card-img-top" src="{{ include.image }}">
     <div class="card-block">
         <h4 class="card-title">
             <a href="{{ site.url }}{{ include.url }}">{{ include.title }}</a>
         </h4>
         <p class="card-text">{{ include.description }}</p>
+    </div>
+    <div class="card-footer">
+        <p class="desc_post">
+        <span class="share_link"><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+        <span class="align-right">Comments X</span>
+        </p>
     </div>
 </div>

@@ -3,8 +3,8 @@ layout: post-detail
 title: Build a secure GPG key
 date: 2017-08-08
 categories: gpg
-description: How build a secure gpg keypair.
-img-url: https://i.imgur.com/IEhmnGkl.jpg 
+description: How build a secure gpg key.
+img-url: https://i.imgur.com/IEhmnGkm.jpg
 comments: true
 ---
 
@@ -159,6 +159,53 @@ If you need share key with friend, generate an a file like this:
 
 ```sh
 $ gpg --armor --output "key.txt" --export <NEWID>
+```
+
+### When subkeys expire.
+
+When key expire, you import the real secret key from flash device and enhance time of 6 month again,
+The procedure seem like bellow, first, you remove expirate key:
+
+```sh
+$ gpg --delete-keys <UUID>
+$ gpg -K
+```
+gpg -K for control than our keys has been delete.
+Import secret key from flash device.
+
+```sh
+$ gpg --import secret.gpg
+$ gpg --edit-key UUID
+    > key 1
+    > key 2
+    > key 3
+    > expire
+    > 6m
+    > save
+```
+
+Now, export new fresh subkey.
+
+```sh
+$ gpg -a --export-secret-keys UUID > laptop_key_secret.gpg
+$ gpg -a --export UUID > laptop_keys_public.gpg
+```
+
+Delete the real secret key again...
+
+```sh
+$ gpg --delete-keys UUID
+```
+
+And import laptop key for our pc.
+
+```sh
+$ gpg --import laptop_keys_public.gpg
+$ gpg --import laptop_keys_secret.gpg
+$ gpg --edit-key UUID
+    > trust
+    > 5 ultime
+    > save
 ```
 
 And we have finished, I'll add article for mutt & other tools later :)
