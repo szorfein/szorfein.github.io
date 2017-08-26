@@ -52,6 +52,10 @@ body, html, p {
     height: 16rem!important;<
 }
 
+.desktop img {
+    width: 100%;
+}
+
 .title {
     font-weight: 700;
     font-size: 17px;
