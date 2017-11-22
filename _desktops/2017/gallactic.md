@@ -9,7 +9,7 @@ font-terminal: Iosevka-term
 font-desktop: Noto Sans
 terminal: termite
 date: 2017-10-09
-wallpaper: https://i.imgur.com/Vpzg41mm.png
+wallpaper: https://imgur.com/chmcGFO.jpg
 link:
     - img: https://i.imgur.com/YQICeRrl.png
     - img: https://i.imgur.com/Vpzg41ml.png
