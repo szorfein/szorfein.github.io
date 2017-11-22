@@ -8,7 +8,7 @@ wm: i3-gaps
 font-terminal: Iosevka-term
 font-desktop: Noto Sans
 terminal: termite
-date: 2017-01-10
+date: 2017-11-01
 wallpaper: https://i.imgur.com/IZbtbnH.jpg
 link:
     - img: https://i.imgur.com/4ZC5lihl.png
