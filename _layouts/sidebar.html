@@ -8,10 +8,10 @@ layout: default
             <div class="container-fluid">
                 <div class="row">
                     {% for post in paginator.posts %}
-                    {% capture postTitle %}{{ post.title }}{% endcapture %}
-                    {% capture postImageUrl %}{{ post.img-url }}{% endcapture %}
-                    {% capture postUrl %}{{ post.url }}{% endcapture %}
-                    {% capture postDesc %}{{ post.description }}{% endcapture %}
+                    {% capture postTitle %}{{post.title}}{% endcapture %}
+                    {% capture postImageUrl %}{{post.img-url}}{% endcapture %}
+                    {% capture postUrl %}{{post.url}}{% endcapture %}
+                    {% capture postDesc %}{{post.description}}{% endcapture %}
                     <div class="col-xs-12 col-sm-12 col-md-6">
                         {% include post.html title=postTitle image=postImageUrl url=postUrl description=postDesc %}
                     </div>
@@ -44,7 +44,9 @@ layout: default
                 <ul class="nav flex-column">
                     {% for post in site.posts limit:5 %}
                     <li class="nav-item light">
-                        <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                        <a href="{{ post.url | relative_url }}">
+                            {{post.title|escape}}
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -64,7 +66,7 @@ layout: default
                             {% if rp.title == post.title %}
                             <li class="nav-item light">
                                 <a class="nav-link" href="{{ rp.url }}">
-                                    {{ post.title | escape }}
+                                    {{post.title|escape}}
                                 </a>
                             </li>
                             {% endif %}

@@ -9,9 +9,9 @@ layout: default
             {% assign desktops = site.desktops | date_sort | reverse %}
             {% for desk in desktops limit:2 %}
             <div class="col-sm-12 col-md-6">
-                {% capture imgLink %}{{ desk.link[0].img }}{% endcapture %}
-                {% capture imgTitle %}{{ desk.title }}{% endcapture %}
-                {% capture url %}{{ site.url}}{{ desk.url }}{% endcapture %}
+                {% capture imgLink %}{{desk.link[0].img}}{% endcapture %}
+                {% capture imgTitle %}{{desk.title}}{% endcapture %}
+                {% capture url %}{{site.url}}{{desk.url}}{% endcapture %}
                 {% include portfolio.html title=imgTitle link=imgLink url=url %}
             </div>
             {% endfor %}

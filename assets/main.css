@@ -245,6 +245,10 @@ body, html, p {
     right: 25px;
 }
 
+.card-columns {
+    column-count: 4;
+}
+
 /* 
  * Media
  */
