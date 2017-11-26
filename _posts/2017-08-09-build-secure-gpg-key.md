@@ -12,29 +12,63 @@ Start build new keypair.
 
 For this purpose, it's generaly recommanded to boot on [tails](https://tails.boum.org) or [kodachi](https://www.digi77.com/linux-kodachi/) and stay offline.
 
-```sh
+    $ gpg --expert --full-generate-key
 
-$ gpg --expert --full-generate-key
+```
+Please select what kind of key you want:
 
-    8 - Choose RSA (set your own capabilities)
-        
+Your selection? 8 - Choose RSA (set your own capabilities)
     S) Toggle the sign capability
     E) Toggle the encrypt capability
     A) Toggle the authentificate capability
     Q) Finished
-    Keysize do you want? 4096
-    Is valid for? 5y
-    Is this correct? y
+
+    What keysize do you want? (2048) 4096
+    Key is valid for? (0) 5y
+    Is this correct? (y/N) y
+
+    You need a user ID to identify your key; the software constructs the user ID
+    from the Real Name, Comment and Email Address in this form:
+    "Heinrich Heine (Der Dichter) <heinrichh@duesseldorf.de>"
+
+    Real name: Alice
+    Email address: alice@protonmail.com
+    Comment:
+    You selected this USER-ID:
+    "Alice <alice@protonmail.com>"
+
+    Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+    You need a Passphrase to protect your secret key
+    Enter passphrase: <Alice's long passphrase>
+    Repeat passphrase: <Alice's long passphrase>
+```
+If need help to create a secure password, try `diceware` [method](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/)
+
+Use a strong cipher preferences:
+
+    $ gpg --edit-key alice
 
 ```
+gpg> setpref SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP
+  Set preference list to:
+  Cipher: AES256, AES192, AES, CAST5, 3DES
+  Digest: SHA512, SHA384, SHA256, SHA224, SHA1
+  Compression: ZLIB, BZIP2, ZIP, Uncompressed
+  Features: MDC, Keyserver no-modify
+  Really update the preferences? (y/N) y
 
-After write you name, email and make a strong password, valid your key.
+  You need a passphrase to unlock the secret key for
+  user: "Alice <alice@domain.com>"
+
+  Enter passphrase: <Alice long passphrase>
+gpg> save
+```
+
 Now, we will create subkey for signing (S), encrypt (E) and authentificate (A).
 
-```sh
+    $ gpg --expert --edit-key alice
 
-$ gpg --expert --edit-key <YourID>
-
+```
 > addkey
     (8) RSA (set your own capabilities)
     Current allowed actions: Sign Encrypt 
@@ -47,7 +81,7 @@ $ gpg --expert --edit-key <YourID>
     Key is valid for? 6m
     (y)
 
-> addkay
+> addkey
     (8) RSA (set your own capabilities)
     (s) Toggle Sign Capability
     Current allowed actions: Encrypt  
@@ -70,142 +104,270 @@ $ gpg --expert --edit-key <YourID>
 
 ```
 
-Your key has been create, we will create a revocation certificate, export key for backup on another device (CD-R or USB key). 
+Your key has been create, we will create a revocation certificate in case where key is compromised.
 
-```sh
-$ gpg -a --export-secret-keys <NEWID> > secret_key.gpg
-$ gpg -a --generate-revocation <NEWID> > revocation_cert.gpg
-    
-    Please select the reason for the revocation:
-    Your desicion? 1 (Key has been compromised)
-
-$ gpg -a --export <NEWID > public_key.gpg
-$ gpg -a --export-secret-subkeys <NEWID> > secret_subkey.gpg
+    $ gpg --generate-revocation alice > revocation.cert
 
 ```
-
-Delete original key.
-
-```sh
-$ gpg --delete-secret-keys <NEWID>
+Create a revocation certificate for this key? (y/N) y
+Please select the reason for the revocation:
+0 = No reason specified
+1 = Key has been compromised
+2 = Key is superseded
+3 = Key is no longer used
+Q = Cancel
+(Probably you want to select 1 here)
+Your decision? 0
+Enter an optional description; end it with an empty line:
+>
+Reason for revocation: No reason specified
+(No description given)
+Is this okay? (y/N) y
+...
+Revocation certificate created.
 ```
 
+Backup your fresh key.
+
+    $ gpg --armor --export-secret-keys alice > alice_secret.key
+    $ gpg --armor --export alice > alice_public.key
+
+Make a tar file
+
+    $ tar -cf alice_master_keys.tar alice*.key revocation.cert
+
+Delete useless file.
+
+    $ shred -u alice*.key revocation.cert
+
+Export all subkeys too temporary.
+
+    $ gpg --export-secret-subkeys alice > subkeys
+
+Now, we have all necessary files, delete original key from actual system.
+
+    $ gpg --delete-secret-keys alice
+
+```
 Press Delete key for each subkey. Verify than output of gpg -K is empty and re-import subkey.
-
-```sh
-$ gpg -K
-$ gpg --import secret_subkeys.gpg
-
 ```
 
-Re-export key for use on laptop.
+Control than output of `gpg -K` is empty.
 
-```sh 
-$ gpg -a --export-secret-keys <NEWID> > laptop_key_secret.gpg
-$ gpg -a --export <NEWID> > laptop_key_public.gpg
+    $ gpg -K
+
+Now, we will create a key with less privilege for laptop or other device. Re-import key:
+
+    $ gpg --import subkeys
 
 ```
-
-Move alls *.gpg files on secure device and boot on your OS.
-Import key with:
-
-```sh 
-$ gpg -a --import laptop_key_pub.gpg
-$ gpg -a --import laptop_keys_secret.gpg
+gpg: key 32D49659: secret key imported
+gpg: key 32D49659: "Alice <alice@domain.com>" 1 new signature
+gpg: Total number processed: 1
+gpg: new signatures: 1
+gpg: secret keys read: 1
+gpg: secret keys imported: 1
 ```
 
-Trust ultimate your keys
+Delete subkeys file.
 
-```sh 
-$ gpg --edit-key <NEWID>
+    $ shred -u subkeys
+
+Verify than the master signing key is missing:
+
+    $ gpg -K
+
+```
+sec#  rsa4096/0x0FF123FF123FF123 2017-02-25 [C] [expire : 2019-02-25]
+Fingerprint of key  = 346E BDED 037B 1949 013D  3576 0F15 D984 5548 7B76
+uid                  [  ultimate ] Alice <alice@protonmail.com>
+ssb   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
+ssb   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
+ssb   rsa4096/0x45FD80474C2BB4FC 2017-02-25 [A] [expire : 2017-08-24]
+```
+
+The first line with 'sec#' means that the secret key is not usable (you cannot create revocation certificate, change password with this key and other things).
+
+Export this lesser key which will be used on all other devices.
+
+    $ gpg --armor --export-secret-keys alice > alice_secret_lesser.key
+    $ gpg --armor --export alice > alice_public_lesser.key
+
+You can make an archive too.
+
+    $ tar -cf alice_lesser_keys.tar alice*.key
+
+To import lesser key on other devices:
+
+    $ tar xvf alice_lesser_keys.tar
+    $ gpg -a --import alice_secret_lesser.key
+    $ gpg -a --import alice_public_lesser.key
+    $ shred -u alice*.key
+
+Trust ultimate on your keys
+
+    $ gpg --edit-key alice
+
+```
 > trust
 > 5 = I trust ultmately
 > save
 ```
 
-Look your imported key, it look like:
+To use our key, we have to edit `gpg.conf`.
 
-```sh
-$ gpg -K
+    $ gpg -k
 
-    sec#  rsa4096/0x0FF123FF123FF123 2017-02-25 [C] [expire : 2019-02-25]
-    Fingerprint of key  = 346E BDED 037B 1949 013D  3576 0F15 D984 5548 7B76
-    uid                  [  ultimate ] Blabla <blabla@proton.com>
-    ssb   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
-    ssb   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
-    ssb   rsa4096/0x45FD80474C2BB4FC 2017-02-25 [A] [expire : 2017-08-24]
+note ID of our subkey with [S] and [E], we need for configure gpg.conf, in this example:
 
 ```
+...
+ssb   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
+ssb   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
+...
+```
+    $ vim ~/.gnupg/gpg.conf
 
-The first line with '#' after sec means that the secret key is not usable (you cannot create revocation certificate with this key and other things).
-Set a gpg.conf with fresh keypair.
-
-```sh
-$ gpg -k
-
-    note ID of our subkey with [S] and [E], we need for configure gpg.conf
-    in this case:
-
-    ssb   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
-    ssb   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
-
-$ vim ~/.gnupg/gpg.conf
-
-    default-key 0x123F234555FFF3FA (flag [S])
-    default-recipient 0x65FFBB38E24C1BFB (flag [E])
+```
+# flag S
+default-key 0x123F234555FFF3FA
+# flag E
+default-recipient 0x65FFBB38E24C1BFB
 ```
 
 If you need share key with friend, generate an a file like this:
 
-```sh
-$ gpg --armor --output "key.txt" --export <NEWID>
+    $ gpg --armor --output key.txt --export alice
+
+## Send key to `keyserver.sks`
+
+You have to search your key ID, this is a last 8 fingerprint character, `55487B76` here.
+
+    $ gpg -k
+      Fingerprint of key  = 346E BDED 037B 1949 013D  3576 0F15 D984 5548 7B76
+
+    $ gpg --keyserver sks.keyservers.net --send-keys 55487B76
+
+When people search your key, they type that:
+
+    $ gpg -keyserver sks.keyservers.net --search-keys alice@protonmail.com
+
+If the list contains many key, you have to compare the fingerprint.
+
+
+## You are compromised
+
+If we have steal your device, we must send a certificate because of course, we are the only ones to have the secret key.
+
+So, you have to boot on tails.
+
+    $ tar xvf gpg_master_keys.tar
+    $ gpg --import alice*.key
+    $ gpg --edit-key alice
+
+```
+> list
+> key 1
+> key 2
+> key 3
+> revkey
+Do you really want to revoke the selected subkeys? (y/N) y
+Please select the reason for the revocation:
+  0 = No reason specified
+  1 = Key has been compromised
+  2 = Key is superseded
+  3 = Key is no longer used
+  Q = Cancel
+Your decision? 1
+Enter an optional description; end it with an empty line:
+>
+Reason for revocation: Key has been compromised
+(No description given)
+Is this okay? (y/N) y
+...
+> save
 ```
 
-### When subkeys expire.
+Export certificate for our other device.
 
-When key expire, you import the real secret key from flash device and enhance time of 6 month again,
-The procedure seem like bellow, first, you remove expirate key:
+    $ gpg --armor --export > revoked_keys.asc
 
-```sh
-$ gpg --delete-keys <UUID>
-$ gpg -K
+And on other devices which use your key.
+
+    $ gpg --import revoked_keys.asc
+    $ gpg --edit-key alice
+
 ```
-gpg -K for control than our keys has been delete.
-Import secret key from flash device.
-
-```sh
-$ gpg --import secret.gpg
-$ gpg --edit-key UUID
-    > key 1
-    > key 2
-    > key 3
-    > expire
-    > 6m
-    > save
-```
-
-Now, export new fresh subkey.
-
-```sh
-$ gpg -a --export-secret-keys UUID > laptop_key_secret.gpg
-$ gpg -a --export UUID > laptop_keys_public.gpg
+...
+pub  rsa4096/0x0FF123FF123FF123 2017-02-25 [C] [expire : 2019-02-25]
+...
+This key was revoked ...
+sub   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
+This key was revoked ...
+sub   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
+This key was revoked ...
+sub   rsa4096/0x45FD80474C2BB4FC 2017-02-25 [A] [expire : 2017-08-24]
+> quit
 ```
 
-Delete the real secret key again...
+You have to send each subkeys to `sks.keyserver.net`
 
-```sh
-$ gpg --delete-keys UUID
+    $ gpg --keyserver sks.keyservers.net --send-keys 123F234555FFF3FA
+    $ gpg --keyserver sks.keyservers.net --send-keys 65FFBB38E24C1BFB
+    $ gpg --keyserver sks.keyservers.net --send-keys 45FD80474C2BB4FC
+    $ rm revoked_keys.asc
+
+That's it.
+
+## When subkeys expire.
+
+When key expire, boot on `tails`, import the real secret key and enhance time of 6 month again,
+The procedure is a bit repetitive...
+
+    $ tar -cf alice_master_keys.tar 
+    $ gpg --armor --import alice_secret.key
+    $ gpg --armor --import alice_public.key
+    $ gpg --edit-key alice
+    
+```
+> key 1
+> key 2
+> key 3
+> expire
+> 6m
+> save
 ```
 
-And import laptop key for our pc.
+And re-do the same thing than before...(yaaa)
 
-```sh
-$ gpg --import laptop_keys_public.gpg
-$ gpg --import laptop_keys_secret.gpg
-$ gpg --edit-key UUID
-    > trust
-    > 5 ultime
-    > save
+    $ gpg -a --export-secret-keys --armor alice > alice_secret.key
+    $ gpg -a --export --armor alice > alice_public.key
+    $ tar -cf alice_master_keys.tar alice*.key revocation.cert
+    $ shred -u alice*.key revocation.cert
+    $ gpg -a --export-secret-subkeys alice > subkeys
+    $ gpg --delete-secret-keys alice
+    $ gpg --import subkeys
+    $ shred -u subkeys
+    $ gpg --armor --export-secret-keys alice > alice_secret_lesser.key
+    $ gpg --armor --export alice > alice_public_lesser.key
+    $ tar -cf alice_lesser_keys.tar alice*.key
+
+On your laptop, you have to remove older key and reimport the new.
+
+    $ gpg --delete-keys alice
+    $ tar xvf alice_lesser_keys.tar
+    $ gpg -a --import alice_secret_lesser.key
+    $ gpg -a --import alice_public_lesser.key
+    $ shred -u alice*.key
+
+Trust:
+    
+    $ gpg --edit-key alice
+
+```
+> trust
+> 5 ultime
+> save
 ```
 
-And we have finished, I'll add article for mutt & other tools later :)
+And we have finished.
