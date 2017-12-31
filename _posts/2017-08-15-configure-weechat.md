@@ -14,12 +14,14 @@ Once weechat install, launch it.
 
 ## Add Freenode server
 
+Add a freenode server without SSL, we enable it later.
+
 ```
-/server add freenode chat.freenode.net/6697 -autoconnect
+/server add freenode chat.freenode.net/6667 -autoconnect
 /connect freenode
 ```
 
-## Create a set of secure data.
+## Create a set of secure data
 
 You can use `pwgen -sy 24 1` to generate password, thing than you need this password all time you start weechat (copy/paste :)).
 
@@ -43,9 +45,13 @@ You have to register an account now, this is a restriction to use TOR. And yes, 
 /msg NickServ GROUP
 ```
 
+You will receive a verification mail. follow instruction.
+
+    /msg NickServ identify "${sec.data.fn_Pwd}"
+
 Next, to enable TOR, we can choose between `ECDSA-NIST256P-CHALLENGE` or using `SASL EXTERNAL`.
 
-## ECDSA-NIST256P-CHALLENGE
+## ECDSA-NIST256P-CHALLENGE
 
 We going to create ecdsa cert, more info [here](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_sasl_ecdsa_nist256p_challenge)
 
@@ -111,8 +117,13 @@ Finally, to use tor. (tor should run)
 /set irc.server.freenode.ssl on
 /proxy add tor socks5 127.0.0.1 9050
 /set irc.server.freenode.proxy "tor"
-/reconnect freenode
 ```
+
+You have to disable `ssl_verify`, dont work with TOR.
+    
+    /set irc.server.freenode.ssl_verify off
+    /reconnect freenode
+
 
 ## Enhance privacy (optionnal)
 
@@ -132,4 +143,4 @@ Add somes settings bellow to weechat. detail from [faq](https://weechat.org/file
 /set weechat.plugin.autoload "*,!xfer"
 ```
 
-#### For any trouble, plz, post an issue to [github](https://github.com/szorfein/szorfein.github.io)
+### For any trouble, please, post an issue to [github](https://github.com/szorfein/szorfein.github.io)
