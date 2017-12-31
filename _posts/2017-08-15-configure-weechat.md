@@ -8,81 +8,104 @@ img-url: https://i.imgur.com/XZOKWVZm.png
 comments: true
 ---
 
-### First create a set of secure data with weechat !
----
-you can use `pwgen -sy 24 1` for generate password, thing than u need this password all time you start weechat (copy/paste :)).
-Use you real email, it will be use if you forget password.
+Once weechat install, launch it.
+
+    $ weechat
+
+## Add Freenode server
+
+```
+/server add freenode chat.freenode.net/6697 -autoconnect
+/connect freenode
+```
+
+## Create a set of secure data.
+
+You can use `pwgen -sy 24 1` to generate password, thing than you need this password all time you start weechat (copy/paste :)).
+
+    /secure passphrase 58W*$C#tjWA}F"DPL%&i5|&[
+
+We need a password and email (gmail, protonmail or what you want).
 
 ```sh
-/secure passphrase 58W*$C#tjWA}F"DPL%&i5|&[
-/secure set freenodePass J*:-V{~>'2z4fpnFGKT`u6Z
-/secure set freenodeUser newUsername
-/secure set freenodeMail newUserMail@example.com
+/secure set fn_Pwd J*:-V{~>'2z4fpnFGKT`u6Z
+/secure set fn_Mail alice@protonmail.com
 ```
 
-### Create freenode server for weechat and create an account. 
----
-Into weechat.
+## Register an account
+
+You have to register an account now, this is a restriction to use TOR. And yes, anonymat takes a hit...
+
 ```
-/server add freenode chat.freenode.net/6697 -ssl -autoconnect
-/connect freenode
-/msg NickServ REGISTER "${sec.data.freenodePass}" "${sec.data.freenodeMail}"
-/msg NickServ IDENTIFY "${sec.data.freenodeUser}" "${sec.data.freenodePass}"
+/msg NickServ REGISTER "${sec.data.fn_Pwd}" "${sec.data.fn_mail}"
+/msg NickServ SET PRIVATE ON
+/msg NickServ IDENTIFY alice "${sec.data.fn_Pwd}"
 /msg NickServ GROUP
 ```
 
-### SASL auth with [ecdsatool](https://github.com/kaniini/ecdsatool).
----
-For SASL authentification, we will create ecdsa cert, more info [here](https://github.com/weechat/weechat/issues/251)
+Next, to enable TOR, we can choose between `ECDSA-NIST256P-CHALLENGE` or using `SASL EXTERNAL`.
+
+## ECDSA-NIST256P-CHALLENGE
+
+We going to create ecdsa cert, more info [here](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_sasl_ecdsa_nist256p_challenge)
 
 ```
-$ openssl ecparam -genkey -name prime256v1 >~/.weechat/ecdsa.pem
+$ mkdir ~/.weechat/certs
+$ cd ~/.weechat/certs
+$ openssl ecparam -genkey -name prime256v1 > ecdsa.pem
 ```
 
 Find fingerprint with command bellow, we need after.
+
 ```
-$ openssl ec -noout -text -conv_form compressed -in ~/.weechat/ecdsa.pem | \
+$ openssl ec -noout -text -conv_form compressed -in ~/.weechat/certs/ecdsa.pem | \
 grep '^pub:' -A 3 | tail -n 3 | tr -d ' \n:' | xxd -r -p | base64
 ```
 
-In weechat, (we don't need define variable sasl_password here)
+return this for me.
+
+    Ao15ByPN8oYy26dzARLyrFLCEbBDS40lk3e1rLJ0yBnR
+
+In weechat, (we don't need use sasl_password here)
+
 ```
-/msg nickserv set pubkey Av8k1FOGetUDq7sPMBfufSIZ5c2I/QYWgiwHtNXkVe
+/msg nickserv identify "${sec.data.fn_pwd}"
+/msg nickserv set pubkey Ao15ByPN8oYy26dzARLyrFLCEbBDS40lk3e1rLJ0yBnR
 /set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
-/set irc.server.freenode.sasl_username "${sec.data.freenodeUser}"
-/set irc.server.freenode.sasl_key "%h/ecdsa.pem"
+/set irc.server.freenode.sasl_username "alice"
+/set irc.server.freenode.sasl_key "%h/certs/ecdsa.pem"
 /reconnect freenode
 ```
 
-### Connect to freenode over TLS.
----
+### SASL EXTERNAL
 
-Make an ssl cert [ref](https://freenode.net/kb/answer/chat)
+Make an tls cert. [ref](https://freenode.net/kb/answer/certfp)
+
 ```sh
-$ mkdir ~/.weechat/ssl
-$ cd ~/.weechat/ssl
-$ openssl req -x509 -sha256 -new -newkey rsa:4096 -days 1000 -nodes -out freenode.pem -keyout freenode.pem
+$ cd ~/.weechat/certs
+$ openssl req -x509 -new -newkey rsa:4096 -sha256 -days 1000 -nodes -out freenode.pem -keyout freenode.pem
 ```
+
+Find sha1sum fingerprint.
+
+    $ openssl x509 -in freenode.pem -outform der | sha1sum -b | cut -d' ' -f1
+      e084219c214d391a8fd75cdbb891b5b966515db7
 
 Into weechat 
-```sh
-/set irc.server.freenode.ssl_cert "%h/ssl/freenode.pem"
-```
-find fingerprint with:
-```sh
-$ openssl x509 -sha1 -noout -fingerprint -in .weechat/ssl/freenode.pem | sed -e 's/^.*=//;s/://g;y/ABCDEF/abcdef/'
-```
 
-Into weechat.
-```
+```sh
 /msg nickserv cert add e084219c214d391a8fd75cdbb891b5b966515db7
 /set irc.server.freenode.ssl_priorities "NORMAL:-VERS-TLS-ALL:+VERS-TLS1.0:+VERS-SSL3.0:%COMPAT"
+/set irc.server.freenode.ssl_cert "%h/certs/freenode.pem"
+/set irc.server.freenode.sasl_mechanism external
+
 /reconnect freenode
 ```
 
-#### Tor
----
-Finally, for use tor (i considerate than tor is alrealy run & work).
+## Tor
+
+Finally, to use tor. (tor should run)
+
 ```sh
 /set irc.server.freenode.addresses "freenodeok2gncmy.onion/7000"
 /set irc.server.freenode.ssl on
@@ -91,8 +114,7 @@ Finally, for use tor (i considerate than tor is alrealy run & work).
 /reconnect freenode
 ```
 
-#### for enhance privacy (optionnal)
----
+## Enhance privacy (optionnal)
 
 Add somes settings bellow to weechat. detail from [faq](https://weechat.org/files/doc/weechat_faq.en.html#security)
 
@@ -110,4 +132,4 @@ Add somes settings bellow to weechat. detail from [faq](https://weechat.org/file
 /set weechat.plugin.autoload "*,!xfer"
 ```
 
-### For any trouble, plz, post an issue to [github](https://github.com/szorfein/szorfein.github.io)
+#### For any trouble, plz, post an issue to [github](https://github.com/szorfein/szorfein.github.io)
