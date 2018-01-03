@@ -4,7 +4,7 @@ title: weechat + Tor + SASL
 date: 2017-08-19
 categories: weechat tor
 description: Configure weechat with tor+SASL & secure password
-img-url: https://i.imgur.com/XZOKWVZm.png
+img-url: https://i.imgur.com/vOCpUA9m.png
 comments: true
 ---
 
@@ -27,11 +27,11 @@ You can use `pwgen -sy 24 1` to generate password, thing than you need this pass
 
     /secure passphrase 58W*$C#tjWA}F"DPL%&i5|&[
 
-We need a password and email (gmail, protonmail or what you want).
+After, we create a password and email (gmail, protonmail or what you want).
 
 ```sh
-/secure set fn_Pwd J*:-V{~>'2z4fpnFGKT`u6Z
-/secure set fn_Mail alice@protonmail.com
+/secure set fn_pwd J*:-V{~>'2z4fpnFGKT`u6Z
+/secure set fn_mail alice@protonmail.com
 ```
 
 ## Register an account
@@ -39,19 +39,19 @@ We need a password and email (gmail, protonmail or what you want).
 You have to register an account now, this is a restriction to use TOR. And yes, anonymat takes a hit...
 
 ```
-/msg NickServ REGISTER "${sec.data.fn_Pwd}" "${sec.data.fn_mail}"
+/msg NickServ REGISTER "${sec.data.fn_pwd}" "${sec.data.fn_mail}"
 /msg NickServ SET PRIVATE ON
-/msg NickServ IDENTIFY alice "${sec.data.fn_Pwd}"
+/msg NickServ IDENTIFY alice "${sec.data.fn_pwd}"
 /msg NickServ GROUP
 ```
 
 You will receive a verification mail. follow instruction.
 
-    /msg NickServ identify "${sec.data.fn_Pwd}"
+    /msg NickServ identify "${sec.data.fn_pwd}"
 
-Next, to enable TOR, we can choose between `ECDSA-NIST256P-CHALLENGE` or using `SASL EXTERNAL`.
+Next, to enable TOR, we must choose between `ECDSA-NIST256P-CHALLENGE` or using `SASL EXTERNAL`.
 
-## ECDSA-NIST256P-CHALLENGE
+## By using ECDSA-NIST256P-CHALLENGE
 
 We going to create ecdsa cert, more info [here](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_sasl_ecdsa_nist256p_challenge)
 
@@ -83,7 +83,7 @@ In weechat, (we don't need use sasl_password here)
 /reconnect freenode
 ```
 
-### SASL EXTERNAL
+## By using SASL EXTERNAL
 
 Make an tls cert. [ref](https://freenode.net/kb/answer/certfp)
 
@@ -119,11 +119,10 @@ Finally, to use tor. (tor should run)
 /set irc.server.freenode.proxy "tor"
 ```
 
-You have to disable `ssl_verify`, dont work with TOR.
+You have to disable `ssl_verify` who doesn't work with TOR.
     
     /set irc.server.freenode.ssl_verify off
     /reconnect freenode
-
 
 ## Enhance privacy (optionnal)
 
@@ -143,4 +142,6 @@ Add somes settings bellow to weechat. detail from [faq](https://weechat.org/file
 /set weechat.plugin.autoload "*,!xfer"
 ```
 
-### For any trouble, please, post an issue to [github](https://github.com/szorfein/szorfein.github.io)
+### Troubleshooting
+
+Please, post an issue to [github](https://github.com/szorfein/szorfein.github.io).
