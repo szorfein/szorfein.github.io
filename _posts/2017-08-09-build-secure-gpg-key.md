@@ -10,9 +10,13 @@ comments: true
 
 Start build new keypair.
 
-For this purpose, it's generaly recommanded to boot on [tails](https://tails.boum.org) or [kodachi](https://www.digi77.com/linux-kodachi/) and stay offline.
+For this purpose, i recommanded you to boot on [tails](https://tails.boum.org) and stay offline, tails linux contain many good thing like [onion share](https://onionshare.org/), a persistant encrypted volume, and many other things.
+
+## Gen new keys (with only C|capability flag)
 
     $ gpg --expert --full-generate-key
+
+You can choose to create a RSA, ECC keys, procedure is the same.
 
 ```
 Please select what kind of key you want:
@@ -44,6 +48,8 @@ Your selection? 8 - Choose RSA (set your own capabilities)
 ```
 If need help to create a secure password, try `diceware` [method](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/)
 
+## Change ciphers
+
 Use a strong cipher preferences:
 
     $ gpg --edit-key alice
@@ -63,6 +69,8 @@ gpg> setpref SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP
   Enter passphrase: <Alice long passphrase>
 gpg> save
 ```
+
+## Add subkeys (S|E|A)
 
 Now, we will create subkey for signing (S), encrypt (E) and authentificate (A).
 
@@ -104,6 +112,8 @@ Now, we will create subkey for signing (S), encrypt (E) and authentificate (A).
 
 ```
 
+## Revocation cert
+
 Your key has been create, we will create a revocation certificate in case where key is compromised.
 
     $ gpg --generate-revocation alice > revocation.cert
@@ -127,36 +137,40 @@ Is this okay? (y/N) y
 Revocation certificate created.
 ```
 
+## Backups into Tar archive
+
 Backup your fresh key.
 
-    $ gpg --armor --export-secret-keys alice > alice_secret.key
-    $ gpg --armor --export alice > alice_public.key
+    $ gpg --armor --export-secret-keys alice > alice-secret.key
+    $ gpg --armor --export alice > alice-public.key
 
 Make a tar file
 
-    $ tar -cf alice_master_keys.tar alice*.key revocation.cert
+    $ tar -cf alice-master-keys.tar alice*.key revocation.cert
 
 Delete useless file.
 
     $ shred -u alice*.key revocation.cert
 
-Export all subkeys too temporary.
+Export all subkeys too temporary, we reimport soon.
 
     $ gpg --export-secret-subkeys alice > subkeys
 
 Now, we have all necessary files, delete original key from actual system.
 
     $ gpg --delete-secret-keys alice
+    $ gpg --delete-keys alice
 
 ```
 Press Delete key for each subkey. Verify than output of gpg -K is empty and re-import subkey.
 ```
 
-Control than output of `gpg -K` is empty.
+Control than output of `gpg -K` and `gpg -k` do not containt our keys.
 
     $ gpg -K
+    $ gpg -k
 
-Now, we will create a key with less privilege for laptop or other device. Re-import key:
+Now, we will create a lesser keys with less privilege by reimport `subkeys` file.
 
     $ gpg --import subkeys
 
@@ -169,11 +183,11 @@ gpg: secret keys read: 1
 gpg: secret keys imported: 1
 ```
 
-Delete subkeys file.
+Clean `subkeys` file.
 
     $ shred -u subkeys
 
-Verify than the master signing key is missing:
+Verify than the master signing key is missing (contain `sec#`):
 
     $ gpg -K
 
@@ -190,12 +204,19 @@ The first line with 'sec#' means that the secret key is not usable (you cannot c
 
 Export this lesser key which will be used on all other devices.
 
-    $ gpg --armor --export-secret-keys alice > alice_secret_lesser.key
-    $ gpg --armor --export alice > alice_public_lesser.key
+    $ gpg --armor --export-secret-keys alice > alice-secret-lesser.key
+    $ gpg --armor --export alice > alice-public-lesser.key
 
 You can make an archive too.
 
     $ tar -cf alice_lesser_keys.tar alice*.key
+
+## Import lesser keys
+
+If you are on tails linux, you can send this archive with [onion share](https://onionshare.org/), it's will generate an url with `.onion`. The service will automaticaly stop when archive is downloaded. To do this on tails:
+
+Go to Places -> Home, right click on `alice-lesser-keys.tar` and select `Share with OnionShare`.  
+So, OnionShare is open, click on `Start sharing`, it generate an url and rename archive.
 
 To import lesser key on other devices:
 
@@ -213,6 +234,8 @@ Trust ultimate on your keys
 > 5 = I trust ultmately
 > save
 ```
+
+# Set our primary key
 
 To use our key, we have to edit `gpg.conf`.
 
@@ -235,7 +258,7 @@ default-key 0x123F234555FFF3FA
 default-recipient 0x65FFBB38E24C1BFB
 ```
 
-If you need share key with friend, generate an a file like this:
+If you need share key with friend or post on the web, generate a file like this:
 
     $ gpg --armor --output key.txt --export alice
 
@@ -255,7 +278,7 @@ When people search your key, they type that:
 If the list contains many key, you have to compare the fingerprint.
 
 
-## You are compromised
+## When you are compromised
 
 If we have steal your device, we must send a certificate because of course, we are the only ones to have the secret key.
 
@@ -370,4 +393,6 @@ Trust:
 > save
 ```
 
-And we have finished.
+### Troubleshooting
+
+Post an issue to [github](https://github.com/szorfein/szorfein.github.io/issues)
