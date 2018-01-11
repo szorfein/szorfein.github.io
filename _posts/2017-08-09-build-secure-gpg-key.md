@@ -221,8 +221,8 @@ So, OnionShare is open, click on `Start sharing`, it generate an url and rename 
 To import lesser key on other devices:
 
     $ tar xvf alice_lesser_keys.tar
-    $ gpg -a --import alice_secret_lesser.key
-    $ gpg -a --import alice_public_lesser.key
+    $ gpg -a --import alice-secret-lesser.key
+    $ gpg -a --import alice-public-lesser.key
     $ shred -u alice*.key
 
 Trust ultimate on your keys
