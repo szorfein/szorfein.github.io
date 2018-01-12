@@ -15,11 +15,48 @@ After start the service, `mongodb` is ready to start on port 27017 per default, 
     $ mongo
       > exit
 
+# Create the root account
+
+Log on mongo.
+
+    $ mongo
+
+```
+> use admin
+> db.createUser({
+    user: 'rootUser',
+    pwd: '1234',
+    roles: [
+        { role: 'root', db: 'admin' }
+    ],
+    authenticationRestrictions: [{
+        clientSource: ['127.0.0.1'],
+        serverAddress: ['127.0.0.1']
+    }]
+})
+> exit
+```
+
+# Add collection if need
+
+Auth on mongo.
+
+    $ mongo -u rootUser -p 1234 --authentication admin
+    
+You can create somes collections now.
+
+```
+> db.createCollection('otherCollection')
+> exit
+```
+
 # Enable TLS/SSL
 
-First, we look to enable TLL/SSL. Here a custom script to generate a self-signed certificate.
+We going to enable TLL/SSL. Here a custom script to generate a self-signed certificate.
 
     $ vim gen-certs.sh
+
+Past content bellow.
 
 ```sh
 
@@ -33,6 +70,7 @@ MAIL=""
 COUNTRY=""
 RANDOM_2DIGIT=""
 PREFIX="mongo"
+ORG_UNIT="dev1"
 
 # boolean
 ENCRYPT=false
@@ -66,7 +104,7 @@ openssl verify -CAfile "${PREFIX}-ca.pem" "${PREFIX}-server.pem"
 
 openssl genrsa -out ${PREFIX}-client.key 2048
 
-openssl req -key ${PREFIX}-client.key -new -out ${PREFIX}-client.req -subj "/C=${COUNTRY:-AU}/ST=NSW/O=Organisation/CN=client1/emailAddress=${MAIL:?}"
+openssl req -key ${PREFIX}-client.key -new -out ${PREFIX}-client.req -subj "/C=${COUNTRY:-AU}/ST=NSW/O=Organisation/OU=${ORG_UNIT:-Organisation-client}/CN=client1/emailAddress=${MAIL:?}"
 
 openssl x509 -req -in ${PREFIX}-client.req -CA ${PREFIX}-ca.pem -CAkey "${PREFIX}-privkey.pem" -CAserial ${PREFIX}-file.srl -out ${PREFIX}-client.crt -days 365
 
@@ -82,10 +120,11 @@ As you look, the script contain somes variables than you can customize:
 
 + `HOST=$(uname -n)`, is better than `localhost` or `127.0.0.1`, for a non-local server, put a domain name.
 + `MAIL=""`
-+ `COUNTRY=""`, default is `AU`, two letter here, FR, EN, US, or nothing.
++ `COUNTRY=""`, default is `AU`, two letter here, FR, EN, US...
 + `RANDOM_2DIGIT=""`, default is `00`
 + `PREFIX="mongo"`, all created file are prefix with mongo.
-+ `ENCRYPT=true`, if enable, program will call for a password.
++ `ENCRYPT=true`, if enable, program will call for a password, recommanded on production env.
++ `ORG_UNIT=""`, or `OU` default is `dev1`. value must be different for each user and from `mongo-ca.pem` cert.
 
 Once ready, launch that:
 
@@ -107,6 +146,8 @@ net:
         mode: requireSSL
         PEMKeyFile: <full-path-mongo-server.pem>
         CAFile: <full-path-mongo-ca.pem>
+security:
+    clusterAuthMode: x509
 ```
 
 Restart the daemon:
@@ -117,9 +158,48 @@ To log in with client:
 
     $ mongo --ssl --sslPEMKeyFile ~/mongo-client.pem --sslCAFile ~/mongo-ca.pem --host <server hostname>
 
-If you have use `ENCRYPT="true"`, you need to add an additionnal argument for passphrase `--sslPEMKeyPassword "yourpassword"`
+If you have set `ENCRYPT="true"`, you need to add an additionnal argument for passphrase `--sslPEMKeyPassword "yourpassword"`
 
-Article will evolve later :)
+# Create user accounts with x509 certs
+
+Retrieve the subject string from a client cert with this command:
+
+    $ openssl x509 -in mongo-client.pem -inform PEM -subject -nameopt RFC2253
+    
+return:
+
+      subject= emailAddress=alice@protonmail.com,CN=client1,OU=dev1,O=Organisation,ST=NSW,C=FR
+
+You have to past this without space character in a mongo shell (drop `subject= `).
+
+    $ mongo --ssl --sslPEMKeyFile ~/mongo-client.pem --sslCAFile ~/mongo-ca.pem --host <server hostname> -u rootUser -p 1234 --authenticationDatabase admin
+
+```
+> db.getSiblingDB("$external").runCommand({
+    createUser: "emailAddress=alice@protonmail.com,CN=client1,OU=dev1,O=Organisation,ST=NSW,C=FR",
+    roles: [
+        { role: 'readWrite', db: 'otherCollection' },
+        { role: 'userAdminAnyDatabase', db: 'admin' }
+    ],
+    writeConcern: { w: "majority" , wtimeout: 5000 }
+})
+> exit
+```
+
+To connect with x509 cert:
+
+    $ mongo --ssl --sslPEMKeyFile ~/.certs/mongo-client.pem --sslCAFile ~/.certs/mongo-ca.pem --host phaeton
+
+And to perform an authentification:
+
+```
+> db.getSiblingDB("$external").auth({
+    mechanism: "MONGODB-X509",
+    user: "emailAddress=alice@protonmail.com,CN=client1,OU=dev1,O=Organisation,ST=NSW,C=FR",
+})
+```
+
+Article will evolve later...
 
 ### Troubleshooting
 
