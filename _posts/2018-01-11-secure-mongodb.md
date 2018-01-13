@@ -41,7 +41,7 @@ Log on mongo.
 
 Auth on mongo.
 
-    $ mongo -u rootUser -p 1234 --authentication admin
+    $ mongo -u rootUser -p 1234 --authenticationDatabase admin
     
 You can create somes collections now.
 
@@ -50,7 +50,7 @@ You can create somes collections now.
 > exit
 ```
 
-# Enable TLS/SSL
+# Enable TLS/SSL
 
 We going to enable TLL/SSL. Here a custom script to generate a self-signed certificate.
 
@@ -188,7 +188,7 @@ You have to past this without space character in a mongo shell (drop `subject= `
 
 To connect with x509 cert:
 
-    $ mongo --ssl --sslPEMKeyFile ~/.certs/mongo-client.pem --sslCAFile ~/.certs/mongo-ca.pem --host phaeton
+    $ mongo --ssl --sslPEMKeyFile ~/mongo-client.pem --sslCAFile ~/mongo-ca.pem --host <server hostname>
 
 And to perform an authentification:
 
@@ -199,7 +199,36 @@ And to perform an authentification:
 })
 ```
 
-Article will evolve later...
+# With MongoId
+
+Last example with a framework like MongoId and a rails project. I just show you an example of configuration.
+
+Let's start generate a config file for rails project:
+
+    $ rails g mongoid:config
+    $ vim config/mongo.yml
+
+```
+development:
+    clients:
+        default:
+            database: otherCollection
+            hosts: 
+                - <HOSTNAME>:27017
+            options:
+                user: 'emailAddress=alice@protonmail.com,CN=client1,OU=dev1,O=Organisation,ST=NSW,C=FR'
+                auth_mech: :mongodb_x509
+                auth_source: otherCollection
+                ssl: true
+                ssl_cert: /<full-path>/mongo-client.pem
+                ssl_key: /<full-path>/mongo-client.pem
+                ssl_verify: true
+                ssl_ca_cert: /<full-path>/mongo-ca.pem
+```
+
+And launch the apps should normally connect to mongo.
+
+    $ rails s
 
 ### Troubleshooting
 
