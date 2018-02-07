@@ -46,6 +46,7 @@ Auth on mongo.
 You can create somes collections now.
 
 ```
+> use otherCollection
 > db.createCollection('otherCollection')
 > exit
 ```

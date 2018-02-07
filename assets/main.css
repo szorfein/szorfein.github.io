@@ -4,7 +4,6 @@
 
 body, html, p {
     color: #757575;
-    font-size: 13px;
     font-weight: 400;
 }
 
@@ -198,6 +197,27 @@ body, html, p {
 
 .widget {
     margin-bottom: 1.5rem;
+}
+
+.main-markdown {
+    margin: auto;
+    width: 500px;
+
+    @media(min-width: 768px) {
+        width: 600px;
+    }
+
+    @media(min-width: 992px) {
+        width: 800px;
+    }
+
+    @media(min-width: 1024px) {
+        width: 900px;
+    }
+}
+
+.main-markdown img {
+    width: 100%;
 }
 
 .main-markdown pre {
