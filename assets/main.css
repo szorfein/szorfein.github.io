@@ -35,6 +35,8 @@ body, html, p {
 
 .main-header {
     width: 100%;
+    font-size: .9em;
+    background-color: rgba(13,17,20,1);
 }
 
 .main-footer {
@@ -201,23 +203,11 @@ body, html, p {
 
 .main-markdown {
     margin: auto;
-    width: 500px;
-
-    @media(min-width: 768px) {
-        width: 600px;
-    }
-
-    @media(min-width: 992px) {
-        width: 800px;
-    }
-
-    @media(min-width: 1024px) {
-        width: 900px;
-    }
 }
 
 .main-markdown img {
     width: 100%;
+    padding: 2em;
 }
 
 .main-markdown pre {
@@ -233,7 +223,6 @@ body, html, p {
 
 .main-markdown p {
     margin: 1.4rem 0;
-    text-align: justify;
 }
 
 .main-markdown a {
@@ -267,6 +256,10 @@ body, html, p {
 
 .card-columns {
     column-count: 4;
+}
+
+.display-4 {
+    font-size: 2rem;
 }
 
 /* 
