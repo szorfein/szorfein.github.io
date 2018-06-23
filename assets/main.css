@@ -22,11 +22,11 @@ body, html, p {
 .section-main {
     background-image: url("imgs/bg.jpg");
     background-repeat: no-repeat;
-    height: 310px;
+    height: 168px;
 }
 
 .banner-text {
-    padding-top: 35px;
+    padding-top: 0;
     padding-bottom: 85px;
     color: #fff;
     text-transform: uppercase;
@@ -247,6 +247,8 @@ body, html, p {
 
 .display-4 {
     font-size: 2rem;
+    font-weight: 100;
+    line-height: 3.3rem;
 }
 
 /* 
@@ -290,4 +292,16 @@ body, html, p {
 .badge {
     margin: .3em .1em !important;
     line-height: 1.3em !important;
+}
+
+.jumbotron {
+    padding: 3rem 2rem !important;
+}
+
+.hr { 
+    margin-top: .1rem;
+}
+
+.main-header .display-4 {
+    font-size: 2.6rem;
 }

@@ -42,7 +42,7 @@ layout: default
             <div class="widget">
                 <h1 class="title">recent post</h1>
                 <ul class="nav flex-column">
-                    {% for post in site.posts limit:8 %}
+                    {% for post in site.posts limit:5 %}
                     <li class="nav-item light">
                         <a href="{{ post.url | relative_url }}">
                             {{post.title|escape}}

@@ -24,12 +24,8 @@
                 <div class="banner-text dark">
                     {% if page.title and page.categories[0] %}
                     <h2 class="display-4">{{ page.title }}</h2>
-                    <hr class="my-4">
-                    <p><a href="{{ site.url }}/about/">{{ site.github_username }}</a> | {{ page.date }} | <a href="{{ site.url }}/tags/">{{ page.categories[0] }}</a></p>
                     {% else %}
                     <h2 class="display-4">{{ site.title }}</h2>
-                    <hr class="my-4">
-                    <p>{{ site.description }}</p>
                     {% endif %}
                 </div>
             </div>

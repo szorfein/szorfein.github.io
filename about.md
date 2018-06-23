@@ -4,9 +4,6 @@ title: About
 permalink: /about/
 ---
 
-# about me
-{: .btitle :}
-
 Autodidact, i'm interrest about thinks like computer, cook, musics, wargame...
 
 ---
