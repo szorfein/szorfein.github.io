@@ -2,17 +2,23 @@
 layout: default
 ---
 
-<h2 class="text-center btitle">Screenshots</h2>
 <div class="container">
-    <div class="card-columns">
-
-        {% assign desktops = site.desktops | date_sort | reverse %}
-        {% for desk in desktops limit:9 %}
-        {% capture imgLink %}{{desk.link[0].img}}{% endcapture %}
-        {% capture imgTitle %}{{desk.title}}{% endcapture %}
-        {% capture url %}{{site.url}}{{desk.url}}{% endcapture %}
-        {% include portfolio.html title=imgTitle link=imgLink url=url %}
-        {% endfor %}
-
+    <div class="section-common">
+        <h2 class="text-center btitle">Screenshots</h2>
+        <div class="row mb-5">
+            {% assign desktops = site.desktops | date_sort | reverse %}
+            {% for desk in desktops %}
+            <div class="col-sm-12 col-md-12 col-lg-9">
+                {% capture imgLink %}{{desk.link[0].img}}{% endcapture %}
+                {% capture imgTitle %}{{desk.title}}{% endcapture %}
+                {% capture url %}{{site.url}}{{desk.url}}{% endcapture %}
+                {% capture desc %} {{desk.desc}} {% endcapture %}
+                {% include portfolio.html title=imgTitle link=imgLink url=url desc=desc %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <a class="btn btn-primary" href="https://www.reddit.com/user/szorfein/posts" role=button">Read all screens on Reddit</a>
+        </div>
     </div>
 </div>
