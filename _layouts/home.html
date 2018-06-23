@@ -41,7 +41,7 @@ layout: default
         <h2 class="text-center btitle">Last Blog post</h2>
         <div class="row">
             {% for post in site.posts limit:4 %}
-            <div class="col-md-6 col-lg-12">
+            <div class="col-md-12 col-lg-12">
                 {% capture postTitle %}{{ post.title }}{% endcapture %}
                 {% capture postUrl %}{{ post.url }}{% endcapture %}
                 {% capture postDesc %}{{ post.description }}{% endcapture %}

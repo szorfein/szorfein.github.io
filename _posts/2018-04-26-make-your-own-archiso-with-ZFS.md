@@ -1,9 +1,9 @@
 ---
 layout: post-detail
-title: Make a archiso with ZFS
+title: Make your own iso with archiso and ZFS support
 date: 2018-04-26
 categories: zfs
-description: Create a archiso with Zfs support.
+description: Create your own iso with archiso and QEMU, include your own tools and scripts.
 img-url: ''
 comments: true
 ---
