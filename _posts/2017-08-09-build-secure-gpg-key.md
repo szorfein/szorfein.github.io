@@ -347,7 +347,7 @@ That's it.
 When key expire, boot on `tails`, import the real secret key and enhance time of 6 month again,
 The procedure is a bit repetitive...
 
-    $ tar -cf alice_master_keys.tar 
+    $ tar -xvf alice_master_keys.tar 
     $ gpg --armor --import alice_secret.key
     $ gpg --armor --import alice_public.key
     $ gpg --edit-key alice
