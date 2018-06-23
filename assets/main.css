@@ -208,6 +208,7 @@ body, html, p {
     color: #000000;
     padding: .3em 0;
     border-bottom: 1px solid #d5d2d8;
+    font-size: 1.8rem;
 }
 
 .main-markdown h2 {

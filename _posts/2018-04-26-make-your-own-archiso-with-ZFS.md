@@ -34,7 +34,7 @@ My repository contain the necessary to install zfs-lts and somes script i need t
 
     # git clone https://github.com/szorfein/Gentoo-ZFS
 
-## Copy files
+# Copy files
 
 Copy the `releng` directory from archlinux to build our custome image.
 
@@ -44,7 +44,7 @@ And update somes files with my repository.
 
     # cp -a Gentoo-ZFS/archiso/* archlive
 
-## ArchZfs and gpg key
+# Repo ArchZFS
 
 Before build iso, you need import the gpg key for `pacman` from [archzfs](https://github.com/archzfs/archzfs/wiki#using-the-archzfs-repository).
 
@@ -52,13 +52,13 @@ Before build iso, you need import the gpg key for `pacman` from [archzfs](https:
     # pacman-key --lsign-key 5E1ABF240EE7A126
     # pacman -Syy
 
-## Build ISO
+# Build ISO
 
     # mkdir archlive/out/
     # cd archlive
     # ./build.sh -v
 
-## Rebuild ISO
+# Rebuild ISO
 
 If you need rebuild iso, then, do it:
 
@@ -67,7 +67,7 @@ If you need rebuild iso, then, do it:
 
 And rebuild iso normally with `./build.sh -v`.
 
-## Retrieve the iso from qemu image
+# Retrieve the iso from qemu image
 
 So, close your vm if it's run.
 
@@ -102,12 +102,12 @@ You have to mount this partition for retrieve the iso image:
     $ cp -a /mnt/root/archlive/out/build/archiso.iso ~
     $ sudo umount /mnt
 
-### Troubleshooting
+## Troubleshooting
 
 **`spl-linux-lts requires linux-lts=X.XX.XX`**  
 
-With this error, you have nothing to do, just wait some times|days, it happens when `linux-lts` is update, [src/kernels/linux-lts.sh](https://github.com/archzfs/archzfs/blob/8e5583632b26cef809abc91eb28afb950dafa989/src/kernels/linux-lts.sh) from from [archzfs](https://github.com/archzfs/archzfs) need to be update and test, post an issue on his repository or wait :)  
-Once the repository is update, remove older build | packages and rebuild iso: 
+With this error, you have nothing to do, just wait some days, it's happen when `linux-lts` is update from archlinux, the team of archzfs have to update somes file like [src/kernels/linux-lts.sh](https://github.com/archzfs/archzfs/blob/8e5583632b26cef809abc91eb28afb950dafa989/src/kernels/linux-lts.sh).
+Once the repository is update, remove older build packages and rebuild iso: 
 
     # cd archlive
     # rm -rf out/*
