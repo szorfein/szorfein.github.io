@@ -293,7 +293,19 @@ body, html, p {
     border: none !important;
 }
 
+.col-lg-7 {
+    margin: auto !important;
+}
+
+.col-lg-8 {
+    margin: auto !important;
+}
+
 .col-lg-9 {
+    margin: auto !important;
+}
+
+.col-xl-7 {
     margin: auto !important;
 }
 

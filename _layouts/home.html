@@ -60,7 +60,7 @@ layout: default
         <div class="row mb-5">
             {% assign desktops = site.desktops | date_sort | reverse %}
             {% for desk in desktops limit:2 %}
-            <div class="col-sm-12 col-md-12 col-lg-9">
+            <div class="col-sm-12 col-md-12 col-lg-8 col-xl-7">
                 {% capture imgLink %} {{desk.link[0].img}} {% endcapture %}
                 {% capture imgTitle %} {{desk.title}} {% endcapture %}
                 {% capture url %} {{site.url}} {{desk.url}} {% endcapture %}
