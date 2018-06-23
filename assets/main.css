@@ -20,7 +20,7 @@ body, html, p {
 }
 
 .section-main {
-    background-image: url("/assets/imgs/bg.jpg");
+    background-image: url("imgs/bg.jpg");
     background-repeat: no-repeat;
     height: 310px;
 }
@@ -270,10 +270,19 @@ body, html, p {
     .md-desktop pre {
         width: 23rem;
     }
+    .col-lg-12 {
+        flex: 0 0 80% !important;
+        margin: auto;
+    }
+
 }
 
 @media (min-width: 1140px) {
     .md-desktop pre {
         width: 27rem;
     }
+}
+
+.card {
+    border: none !important;
 }
