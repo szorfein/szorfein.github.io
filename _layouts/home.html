@@ -1,7 +1,45 @@
 ---
 layout: default
 ---
+<!-- POST -->
+<div class="container">
+    <div class="section-common">
+        <h2 class="text-center btitle">Last Blog post</h2>
+        <div class="row">
+            {% for post in site.posts limit:4 %}
+            <div class="col-md-12 col-lg-9">
+                {% capture postTitle %}{{ post.title }}{% endcapture %}
+                {% capture postUrl %}{{ post.url }}{% endcapture %}
+                {% capture postDesc %}{{ post.description }}{% endcapture %}
+                {% include post.html title=postTitle url=postUrl description=postDesc %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a class="btn btn-primary" href="{{ site.url }}/blog/" role="button">View All</a>
+        </div>
+    </div>
+</div>
+<!-- END POST -->
 
+
+<!-- SOCIAL LINK -->
+<div class="bg_dark section-common">
+    <div class="container">
+        <div class="text-center dark">
+            <!-- Testimonial here -->
+            <h1><i class="fa fa-reddit" aria-hidden="true"></i></h1>
+            <blockquote class="blockquote">
+                <p class="mb-0 dark">
+                from <a href="https://www.reddit.com/user/Mellowh">Mellowh</a> Mmmm I love your colours and background so much. Very inspiring !!
+                </p>
+            </blockquote>
+        </div>
+    </div>
+</div>
+<!-- END SOCIAL LINK -->
+
+<!-- SCREEN PART -->
 <div class="container">
     <div class="section-common">
         <h2 class="text-center btitle">Last desktop</h2>
@@ -21,36 +59,4 @@ layout: default
         </div>
     </div>
 </div>
-
-<div class="bg_dark section-common">
-    <div class="container">
-        <div class="text-center dark">
-            <!-- Testimonial here -->
-            <h1><i class="fa fa-reddit" aria-hidden="true"></i></h1>
-            <blockquote class="blockquote">
-                <p class="mb-0 dark">
-                from <a href="https://www.reddit.com/user/Mellowh">Mellowh</a> Mmmm I love your colours and background so much. Very inspiring !!
-                </p>
-            </blockquote>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="section-common">
-        <h2 class="text-center btitle">Last Blog post</h2>
-        <div class="row">
-            {% for post in site.posts limit:4 %}
-            <div class="col-md-12 col-lg-12">
-                {% capture postTitle %}{{ post.title }}{% endcapture %}
-                {% capture postUrl %}{{ post.url }}{% endcapture %}
-                {% capture postDesc %}{{ post.description }}{% endcapture %}
-                {% include post.html title=postTitle url=postUrl description=postDesc %}
-            </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-4">
-            <a class="btn btn-primary" href="{{ site.url }}/blog/" role="button">View All</a>
-        </div>
-    </div>
-</div>
+<!-- END SCREEN PART -->
