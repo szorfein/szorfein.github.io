@@ -286,3 +286,8 @@ body, html, p {
 .social .btitle {
     color: #dee4e4 !important;
 }
+
+.badge {
+    margin: .3em .1em !important;
+    line-height: 1.3em !important;
+}
