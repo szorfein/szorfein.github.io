@@ -39,10 +39,6 @@ body, html, p {
     background-color: rgba(13,17,20,1);
 }
 
-.main-footer {
-    background-color: #232328;
-}
-
 .main-container {
     padding-top: .6rem;
     padding-bottom: 1.5rem;
@@ -82,15 +78,6 @@ body, html, p {
     color: #ede;
 }
 
-.main-footer h2 {
-    padding-top: 14px;
-    padding-bottom: 8px;
-}
-
-.footer-social {
-    padding: 78px 0 92px;
-}
-
 .copyright {
     background-color: #1d1d21;
     padding: 20px 0;
@@ -118,7 +105,7 @@ body, html, p {
     line-height: 23px;
     border-radius: 50%;
     background-color: #383838;
-    font-size: 18px;
+    font-size: 30px;
     margin: 0 5px;
 }
 
@@ -289,4 +276,13 @@ body, html, p {
 
 .col-lg-9 {
     margin: auto !important;
+}
+
+.social {
+    color: #fff;
+    padding: .9em 0;
+}
+
+.social .btitle {
+    color: #dee4e4 !important;
 }
