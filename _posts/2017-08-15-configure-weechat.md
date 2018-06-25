@@ -12,18 +12,38 @@ Once weechat install, launch it.
 
     $ weechat
 
-## Add Freenode server
+# Add a Freenode server
 
 Add a freenode server without SSL, we enable it later.
 
-```
-/server add freenode chat.freenode.net/6667 -autoconnect
-/connect freenode
-```
+    /server add freenode chat.freenode.net/6667 -autoconnect
 
-## Create a set of secure data
+Set your username and the password 
 
-You can use `pwgen -sy 24 1` to generate password, thing than you need this password all time you start weechat (copy/paste :)).
+    /set irc.server.freenode.nicks ninja
+
+Connect to freenode...
+
+    /connect freenode
+
+# Create your freenode account
+
+You have to create an account, this is a restriction to use TOR. And yes, anonyma is take a hit...
+You can create a password with `pwgen` like this: `pwgen -sy 24 1`.
+
+    /msg NickServ REGISTER password ninja@ninja.co
+
+Keep your email address private:
+
+    /msg NickServ SET PRIVATE ON
+
+You will receive in your mail box, a command line to enter bellow like:
+
+    /msg NickServ VERIFY REGISTER ninja ijgimopaoijv
+
+# Keep your secrets encrypted
+
+thing than you need this password all time you start weechat (copy/paste :)).
 
     /secure passphrase 58W*$C#tjWA}F"DPL%&i5|&[
 
@@ -34,60 +54,14 @@ After, we create a password and email (gmail, protonmail or what you want).
 /secure set fn_mail alice@protonmail.com
 ```
 
-## Register an account
+Next, to enable TOR, we will using the `SASL EXTERNAL` method, don't use the ECDSA-NIST256P-CHALLENGE, NIST algo shouldn't be trust [details]().
 
-You have to register an account now, this is a restriction to use TOR. And yes, anonymat takes a hit...
+# Enable SASL EXTERNAL
 
-```
-/msg NickServ REGISTER "${sec.data.fn_pwd}" "${sec.data.fn_mail}"
-/msg NickServ SET PRIVATE ON
-/msg NickServ IDENTIFY alice "${sec.data.fn_pwd}"
-/msg NickServ GROUP
-```
-
-You will receive a verification mail. follow instruction.
-
-    /msg NickServ identify "${sec.data.fn_pwd}"
-
-Next, to enable TOR, we must choose between `ECDSA-NIST256P-CHALLENGE` or using `SASL EXTERNAL`.
-
-## By using ECDSA-NIST256P-CHALLENGE
-
-We going to create ecdsa cert, more info [here](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_sasl_ecdsa_nist256p_challenge)
-
-```
-$ mkdir ~/.weechat/certs
-$ cd ~/.weechat/certs
-$ openssl ecparam -genkey -name prime256v1 > ecdsa.pem
-```
-
-Find fingerprint with command bellow, we need after.
-
-```
-$ openssl ec -noout -text -conv_form compressed -in ~/.weechat/certs/ecdsa.pem | \
-grep '^pub:' -A 3 | tail -n 3 | tr -d ' \n:' | xxd -r -p | base64
-```
-
-return this for me.
-
-    Ao15ByPN8oYy26dzARLyrFLCEbBDS40lk3e1rLJ0yBnR
-
-In weechat, (we don't need use sasl_password here)
-
-```
-/msg nickserv identify "${sec.data.fn_pwd}"
-/msg nickserv set pubkey Ao15ByPN8oYy26dzARLyrFLCEbBDS40lk3e1rLJ0yBnR
-/set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
-/set irc.server.freenode.sasl_username "alice"
-/set irc.server.freenode.sasl_key "%h/certs/ecdsa.pem"
-/reconnect freenode
-```
-
-## By using SASL EXTERNAL
-
-Make an tls cert. [ref](https://freenode.net/kb/answer/certfp)
+Create a new certificate TLS. [ref](https://freenode.net/kb/answer/certfp)
 
 ```sh
+$ mkdir ~/.weechat/certs
 $ cd ~/.weechat/certs
 $ openssl req -x509 -new -newkey rsa:4096 -sha256 -days 1000 -nodes -out freenode.pem -keyout freenode.pem
 ```
@@ -97,24 +71,26 @@ Find sha1sum fingerprint.
     $ openssl x509 -in freenode.pem -outform der | sha1sum -b | cut -d' ' -f1
       e084219c214d391a8fd75cdbb891b5b966515db7
 
-Into weechat 
+Into weechat, we switch to ssl.
 
 ```sh
 /msg nickserv cert add e084219c214d391a8fd75cdbb891b5b966515db7
 /set irc.server.freenode.ssl_priorities "NORMAL:-VERS-TLS-ALL:+VERS-TLS1.0:+VERS-SSL3.0:%COMPAT"
 /set irc.server.freenode.ssl_cert "%h/certs/freenode.pem"
 /set irc.server.freenode.sasl_mechanism external
-
+/set irc.server.freenode.ssl on
+/set irc.server.freenode.addresses "chat.freenode.net/6667 -autoconnect
 /reconnect freenode
 ```
 
-## Tor
+You should be reconnect with your username.
+
+# Tor
 
 Finally, to use tor. (tor should run)
 
 ```sh
 /set irc.server.freenode.addresses "freenodeok2gncmy.onion/7000"
-/set irc.server.freenode.ssl on
 /proxy add tor socks5 127.0.0.1 9050
 /set irc.server.freenode.proxy "tor"
 ```
@@ -124,7 +100,7 @@ You have to disable `ssl_verify` who doesn't work with TOR.
     /set irc.server.freenode.ssl_verify off
     /reconnect freenode
 
-## Enhance privacy (optionnal)
+# Enhance your privacy
 
 Add somes settings bellow to weechat. detail from [faq](https://weechat.org/files/doc/weechat_faq.en.html#security)
 
@@ -142,6 +118,14 @@ Add somes settings bellow to weechat. detail from [faq](https://weechat.org/file
 /set weechat.plugin.autoload "*,!xfer"
 ```
 
-### Troubleshooting
+And save all our works:
+
+     /save
+
+Reconnect to freenode as a ninja :)
+
+     /reconnect freenode
+
+## Troubleshooting
 
 Please, post an issue to [github](https://github.com/szorfein/szorfein.github.io).

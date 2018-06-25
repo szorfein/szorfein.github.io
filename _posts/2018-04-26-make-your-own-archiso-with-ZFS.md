@@ -91,14 +91,14 @@ vms/Arch2.raw2   6144   530431   524288   256M Système de fichiers Linux
 vms/Arch2.raw3 530432 20971486 20441055   9,8G Système de fichiers Linux
 ```
 
-You only need sector size, 512 here, and the beginning of partition 2: 6144:
+You only need sector size, 512 here, and the beginning of partition 3: 530432.
 
     $ bc 
-    6144*512 = 3145728
+    530432*512 = 271581184
 
 You have to mount this partition for retrieve the iso image:
 
-    $ sudo mount -o loop,offset=5145728 Archvm.raw /mnt
+    $ sudo mount -o loop,offset=271581184 Archvm.raw /mnt
     $ cp -a /mnt/root/archlive/out/build/archiso.iso ~
     $ sudo umount /mnt
 
