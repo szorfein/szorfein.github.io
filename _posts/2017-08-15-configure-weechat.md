@@ -41,19 +41,6 @@ You will receive in your mail box, a command line to enter bellow like:
 
     /msg NickServ VERIFY REGISTER ninja ijgimopaoijv
 
-# Keep your secrets encrypted
-
-thing than you need this password all time you start weechat (copy/paste :)).
-
-    /secure passphrase 58W*$C#tjWA}F"DPL%&i5|&[
-
-After, we create a password and email (gmail, protonmail or what you want).
-
-```sh
-/secure set fn_pwd J*:-V{~>'2z4fpnFGKT`u6Z
-/secure set fn_mail alice@protonmail.com
-```
-
 Next, to enable TOR, we will using the `SASL EXTERNAL` method, don't use the ECDSA-NIST256P-CHALLENGE, NIST algo shouldn't be trust [details]().
 
 # Enable SASL EXTERNAL
