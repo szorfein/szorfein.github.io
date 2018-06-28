@@ -18,7 +18,7 @@ Add a freenode server without SSL, we enable it later.
 
     /server add freenode chat.freenode.net/6667 -autoconnect
 
-Set your username and the password 
+Change the nickname by default, it's used by freenode to create your account...
 
     /set irc.server.freenode.nicks ninja
 
@@ -66,7 +66,7 @@ Into weechat, we switch to ssl.
 /set irc.server.freenode.ssl_cert "%h/certs/freenode.pem"
 /set irc.server.freenode.sasl_mechanism external
 /set irc.server.freenode.ssl on
-/set irc.server.freenode.addresses "chat.freenode.net/6697 -autoconnect
+/set irc.server.freenode.addresses "chat.freenode.net/6697
 /reconnect freenode
 ```
 

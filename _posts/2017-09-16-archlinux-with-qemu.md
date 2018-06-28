@@ -8,23 +8,25 @@ img-url: https://i.imgur.com/VTg4vo0m.png
 comments: true
 ---
 
-### 1 - Download the last iso.
+# Download the last iso
 
-We need an iso, download the last on official archlinux [site]( https://www.archlinux.org/download/).
+We need the official iso to start, download the last on [archlinux]( https://www.archlinux.org/download/).
 
-### 2 - Create a virtual Hard disk drive.
+# Create a virtual Hard disk drive
 
 We create a HDD of 8G here:
 
     $ qemu-img create -f raw ArchLinux.raw 8G
 
-### 3 - Create a script for qemu.
+# Create a little script for QEMU
 
 With our favorite text editor, create a script bellow:
 
     $ vim archvm
-    #!/bin/sh
-    exec qemu-system-x86_64 \
+
+```
+#!/bin/sh
+exec qemu-system-x86_64 \
     -enable-kvm \
     -cpu host \
     -display sdl \
@@ -34,22 +36,21 @@ With our favorite text editor, create a script bellow:
     -monitor stdio \
     -name "Arch VM" \
     $@
+```
 
 And set it executable.
 
     $ chmod +x archvm
 
-### 3 - Boot on the iso file.
+# Boot on archlinux
 
-Now than the script is write, we must simply add two arguments for change boot order:
+Now that we have a script, we simply add two arguments to change the boot order:
 
     $ archvm -boot d -cdrom archlinux.iso
 
-### 4 - Archlinux install
+# Archlinux install
 
-Sry for beginners but i will just write all commands without detailled explanation.  
 If you don't understand somes command line, please look to the  official [wiki](https://wiki.archlinux.org/index.php/Installation_Guide).
-
 
 Change keyboard layout for non-english
 
@@ -64,7 +65,7 @@ Partition ArchLinux.raw, the name on qemu is vda bellow sda.
         n # partition 3 [enter], from beginning [enter], [enter], code [enter]
         w
 
-Format with ext4, not need the better filesystem.
+Format with ext4, not need a better filesystem.
 
     # mkfs.ext4 /dev/vda2
     # mkfs.ext4 /dev/vda3
@@ -99,15 +100,15 @@ Install grub as bootloader:
     # grub-install --target=i386-pc /dev/vda
     # grub-mkconfig -o /boot/grub/grub.cfg
 
-Set your new password before turning of the virtual system.
+Set your new password before turning off the vm.
 
     # passwd
 
-And exit to chroot and shutdown.
+And shutdown.
 
     # exit
     # systemctl poweroff
 
-### Restart on your new system with our script.
+# Restart with our script
 
     $ archvm
