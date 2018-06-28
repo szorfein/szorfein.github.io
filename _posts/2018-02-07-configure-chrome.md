@@ -14,18 +14,18 @@ Once installing, go to URL bellow:
 + chrome -> chrome://settings/content
 + vivaldi -> vivaldi://settings/content
 
-It will open thing like this: 
-![content](/assets/imgs/vivaldi_01.jpg "chrome setting 1")
+Theses settings are not available in `incognito` mode, so start the browser normally.
 
 # Disable everything
 
-Next, you block every options, like the both screenshots.
+Next, you block every options, like the both screenshots bellow.
+![content](/assets/imgs/vivaldi_01.jpg "chrome setting 1")
 ![content](/assets/imgs/vivaldi_02.jpg "chorme settings 2")
 
 Concerning javascript, you have too allow only site than you like visit.
 ![content](/assets/imgs/vivaldi_03.jpg "chrome settings javascript")
 
-For cookies, we remove them when we close the browser:
+For cookies, we keep data until you close the browser and block third party cookies.
 ![content](/assets/imgs/vivaldi_05.jpg "chrome cookie")
 
 Security & privacy, only enable `Do not track`:
@@ -73,7 +73,8 @@ For `--proxy-server` option, you have two choice:
 
 # Extensions
 
-The tor project recommand do not install many extension, so the tor browser use noscript and https-everywhere, the tails project has add ublock-origin.  
+The tor project recommand do not install many extension, so the [tor browser](https://www.torproject.org/projects/torbrowser.html.en) use `noscript` and `https-everywhere`, [tails linux](https://tails.boum.org) has add `ublock-origin`.  
+
 So for chrome, you can add [https-everywhere](https://www.eff.org/https-everywhere), [ublock-origin](https://github.com/gorhill/uBlock) and [scriptsafe](https://github.com/andryou/scriptsafe).
 
 ### Troubleshooting
