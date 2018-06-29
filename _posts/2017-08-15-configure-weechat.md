@@ -8,7 +8,7 @@ img-url: https://i.imgur.com/vOCpUA9m.png
 comments: true
 ---
 
-Once weechat install, launch it.
+Once weechat is install, launch it.
 
     $ weechat
 
@@ -41,7 +41,7 @@ You will receive in your mail box, a command line to enter bellow like:
 
     /msg NickServ VERIFY REGISTER ninja ijgimopaoijv
 
-Next, to enable TOR, we will using the `SASL EXTERNAL` method, don't use the ECDSA-NIST256P-CHALLENGE, NIST algo shouldn't be trust [details]().
+Next, to enable TOR, we will using the `SASL EXTERNAL` method.
 
 # Enable SASL EXTERNAL
 
