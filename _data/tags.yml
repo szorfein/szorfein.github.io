@@ -7,17 +7,11 @@
     - title: vim and gpg with gnupg
     - title: Build a secure GPG key
 
-- name: Password
-  post: 
-    - title: vim and gpg with gnupg
-    - title: Build a secure GPG key
-
-- name: Crypt
-  post: 
-    - title: vim and gpg with gnupg
-    - title: Build a secure GPG key
-
 - name: Tor
   post: 
     - title: weechat + Tor + SASL
+    - title: Configure tor
 
+- name: Metasploit
+  post:
+      - title: Create a backdoored app with evil droid and metasploit.
