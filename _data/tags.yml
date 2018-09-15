@@ -15,3 +15,7 @@
 - name: Metasploit
   post:
       - title: Create a backdoored app with evil droid and metasploit.
+
+- name: CTF
+  post:
+    - title: CTF - Walkthrough with mrrobot 1
