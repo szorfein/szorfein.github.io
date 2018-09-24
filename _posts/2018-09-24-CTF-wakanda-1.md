@@ -3,10 +3,14 @@ layout: post-detail
 title: CTF challenge - wakanda
 date: 2018-09-24
 categories: CTF
-description: CTF wakanda, vm found on: https://www.vulnhub.com/entry/wakanda-1,251/
+description: Walkthrough on wakanda-1 from https://www.vulnhub.com/entry/wakanda-1,251/
 img-url: ''
 comments: true
 ---
+
+# Download the iso
+
+Image is here:  https://www.vulnhub.com/entry/wakanda-1,251/
 
 # Target
 
