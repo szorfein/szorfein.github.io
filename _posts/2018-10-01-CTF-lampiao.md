@@ -3,7 +3,7 @@ layout: post-detail
 title: Walkthrough on the CTF lampiao
 date: 2018-10-01
 categories: CTF
-description: CTF on lampiao, iso : https://www.vulnhub.com/entry/lampiao-1,249/
+description: CTF on lampiao, iso https://www.vulnhub.com/entry/lampiao-1,249/
 img-url: ''
 comments: true
 ---
