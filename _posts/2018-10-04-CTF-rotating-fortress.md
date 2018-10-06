@@ -55,6 +55,8 @@ OS details: Linux 3.2 - 4.9
 
 Web server on 80, 37025 database, ssh ? , and system debian linux
 
+# Flag 1
+
 Let's look the web server on `http://192.168.2.59`.
 
 redirect to /Janus.php
@@ -85,7 +87,9 @@ Reload the page:
 Welcome Back Admin Last edited file was: /LELv3FfpLrbX1S4Q2FHA1hRtIoQa38xF8dzc8O9z/home.html Flag: 1{7daLI]} ggez
 ```
 
-go into http://192.168.2.53//LELv3FfpLrbX1S4Q2FHA1hRtIoQa38xF8dzc8O9z/home.html
+# Flag 2
+
+Go to http://192.168.2.53//LELv3FfpLrbX1S4Q2FHA1hRtIoQa38xF8dzc8O9z/home.html
 
 We have a page with 3 links: Home | News | Wheel
 + `home` has a weird gif with a code: `66 71 76 66 61 62`
@@ -160,7 +164,11 @@ To do:
 - Flag 2{tr09u2} What would happen if I just say...input 1000 A's?
 ```
 
+# Flag 3
+
 We have an indice for the page `/news.html`. The caesar cipher, i'll write the script in ruby.
+
+    $ vim decrypt.rb
 
 ```ruby
 #!/usr/bin/env ruby
@@ -200,6 +208,8 @@ puts "max #{max} characters"
 
 puts "**Crack caesar cipher ***************"
 i = 1
+# This first part just try with -100 to -1.
+# if a letter is became < 0 with -X, they are subtract to the max 256 - X
 (1..100).each do |n|
   new.each do |s|
     letterEncoded=s - i
@@ -218,6 +228,7 @@ i = 1
   strvoid=""
 end
 i = 1
+# this part try +1 to +100.
 (1..100).each do |n|
   new.each do |s|
     letterEncoded=s + n
@@ -279,22 +290,30 @@ The message `inside` from `Harpocrates.gif`. Let's lool with the command `string
 the link will not work during isolation
 ```
 
+# Flag 4
+
 We have a new code to decrypt, a link.
+
+    $ ./decrypt.rb "/|117||107||126||104||109||108||105||117||123||114||125||117||122||117||105||112||114||104||123||104||121||108||108||118||122||126||107||114||108||123||103||121|/"
 
 ```txt
 Decoded -6 content : pfychgdpvmxpupdkmcvctggquyfmgvbt
 ```
+
 Go to `http://192.168.2.53/pfychgdpvmxpupdkmcvctggquyfmgvbt/`
+
 
 ```txt
 Access Denied
-...
+```
 
 The page have a cookie `pass` with value 0, put the same key than the wheel_code.
 
 ```txt
 You have come far but your journey is not over yet. ./Papa_Legba will guide you, good luck. Flag: decoded and ready to roll out, Flag 4{d#B=TVf5}
 ```
+
+# Flag 5
 
 New url to go: http://192.168.2.53/pfychgdpvmxpupdkmcvctggquyfmgvbt/Papa_Legba/
 
@@ -304,7 +323,7 @@ We have a form with a password, and 2 buttons `download` and `submit`. First dow
     papa_legba.zip: Zip archive data, at least v2.0 to extract
     $ 7z x papa_legba.zip
     
-We got a `papa_legba.mp3` and a `scramble.jpg`, an audio morse code :), hopefully, the web is full of stuff for decode this file: https://morsecode.scphillips.com/labs/audio-decoder-adaptive/.
+We got a `scramble.jpg` and `papa_legba.mp3`, an audio morse code :), hopefully, the web is full of stuff for decode this file: https://morsecode.scphillips.com/labs/audio-decoder-adaptive/.
 
 The `scramble.jpg` contain a grid to create a password of 9 characters.
 
@@ -385,6 +404,9 @@ You have the result after more or less 1 hour. Once time you submit the password
 ```txt
 Flag 5{XOIQMZ} Hidden in plain sight, well done goto: /pfychgdpvmxpupdkmcvctggquyfmgvbt/xhyzwrwjrf/
 ```
+
+# Flag 6
+
 Click on the new message, a partition of music appear, again a code...
 
 ```txt
@@ -396,8 +418,13 @@ God i know nothing about this :), i googling a bit to discover wtf are the other
 
 Note name between french and english are totally different, i know `Do-Re-Mi-Fa-Sol-La-Si` but anyway: The mid C is a Mid Do :) 
 
-We just compare and add +1 per line:
-1 (+4): 39997, 2 (+9): 40002, 3 (+6): 39999, 4 (+4) 39997, 5 (+0): 39993, 6 (+0): 39993.  
+We just compare and add +1 per 1/2 line:  
++ note 1 (+4): 39997
++ note 2 (+9): 40002
++ note 3 (+6): 39999
++ note 4 (+4): 39997
++ note 5 (+0): 39993
++ note 6 (+0): 39993
 
 So, `39997`, `40002`, `39999`, `39993`, what this is can match?
 
@@ -494,6 +521,8 @@ Flag 6 {r98yf53k<2x} Knock Knock...Who's There. It's me HACKERMAN!
 login: zeus:ALL_FLAGS_COMBINED
 ```
 
+# The end
+
 The end comming soon we seem !
 
     $ su zeus
@@ -544,4 +573,4 @@ sudo cat /flag.txt
 Thanks for playing!
 ```
 
-Just whoaaa 4 days to finish this vm, caesar cipher, morse code, partition of music, mamy, many thing on this crazy vm :)
+Just whoaaa 4 days to finish this vm, caesar cipher, morse code, partition of music, many, many thing on this crazy vm :)
