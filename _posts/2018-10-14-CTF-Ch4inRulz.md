@@ -57,6 +57,8 @@ Quick tcp scan:
 + GNU/Linux Debian 5 ubuntu1.10
 + tcp port 8011 http-method = POST OPTIONS GET HEAD
 
+We discover 2 sites.
+
     $ nc -v 192.168.2.180 8011
     GET POST HTTP/1.1
     <h1>Development Server !</h1>
