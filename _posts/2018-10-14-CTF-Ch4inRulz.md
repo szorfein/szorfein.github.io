@@ -57,21 +57,16 @@ Quick tcp scan:
 + GNU/Linux Debian 5 ubuntu1.10
 + tcp port 8011 http-method = POST OPTIONS GET HEAD
 
-I didn't know the protocol OPTIONS...
-
     $ nc -v 192.168.2.180 8011
-    POST
+    GET POST HTTP/1.1
     <h1>Development Server !</h1>
-    OPTIONS
 
-So the port 8011 is the Development Server
-
-Let's look the site on port 80. We found a name `FRANK TOPE`
+Let's go see the site on port 80. We found a name `FRANK TOPE`.
 
 + `/robots.txt` is clean.
 + `/README.md` the page is just a bootstrap template.
 
-But all this seem useless. See the development site on `8011` with `dirb`. 
+But all the rest seem useless. See the development site on `8011` with `dirb`. 
 
     $ dirb http://192.168.2.180:8011 /usr/share/dict/dirb-wordlists/common.txt
 
@@ -84,7 +79,7 @@ But all this seem useless. See the development site on `8011` with `dirb`.
 + http://192.168.2.180:8011/api/index.html (CODE:200|SIZE:351)
 ```
 
-The `/api` page contain interesting things:
+The `/api` contain interesting things:
 
 ```txt
 This API will be used to communicate with Frank's server
@@ -197,15 +192,15 @@ And dirb:
 + http://192.168.2.180/development/uploader/upload (CODE:200|SIZE:113)
 ```
 
-So, look into `/development/uploader/`... to discover a page to upload a file. I've try to upload an other file and:
+Go at `/development/uploader/`... to discover a page to upload a file. I've try to upload a `.txt` to observe the result:
 
 ```txt
 File is an image - image/jpeg.Sorry, only JPG, JPEG, PNG & GIF files are allowed.Sorry, your file was not uploaded.
 ```
 
-Ok, we'll upload a gif with a payload, let's check how make this...
+Ok, we will use a php reverse shell and disguise it in `gif`, let's check how make this :)  
 After few time on google, i've found a post [here](https://blackpentesters.blogspot.com/2013/08/gif-image-xss.html).  
-In resume, we can add a gif header hexa code (GIF89a - this value is in any gif image) at the beginnig of any file, so we need a php reverse shell.  
+In resume, we can add a gif header (GIF89a) at the beginnig of our script, this may be enough to fool the website.  
 I use a reverse shell found in the package `webshells`, source `https://github.com/BlackArch/webshells`.
 
     $ cp /usr/share/webshells/php/php-reverse-shell.php ./
