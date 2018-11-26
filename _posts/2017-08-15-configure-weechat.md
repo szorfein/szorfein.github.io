@@ -66,7 +66,7 @@ Into weechat, we switch to ssl.
 /set irc.server.freenode.ssl_cert "%h/certs/freenode.pem"
 /set irc.server.freenode.sasl_mechanism external
 /set irc.server.freenode.ssl on
-/set irc.server.freenode.addresses "chat.freenode.net/6697
+/set irc.server.freenode.addresses "chat.freenode.net/6697"
 /reconnect freenode
 ```
 
@@ -107,11 +107,11 @@ Add somes settings bellow to weechat. detail from [faq](https://weechat.org/file
 
 And save all our works:
 
-     /save
+    /save
 
 Reconnect to freenode as a ninja :)
 
-     /reconnect freenode
+    /reconnect freenode
 
 ## Troubleshooting
 
