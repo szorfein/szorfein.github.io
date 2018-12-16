@@ -16,37 +16,53 @@ For this purpose, i recommanded you to boot on [tails](https://tails.boum.org) a
 
     $ gpg --expert --full-generate-key
 
-You can choose to create a RSA, ECC keys, procedure is the same.
+You can choose to create a RSA, ECC keys, procedure is the same, for this wiki, i create an ECC key.
 
-```
+```txt
 Please select what kind of key you want:
+  (11) ECC (set your own capabilities)
+Your selection? 11
+```
 
-Your selection? 8 - Choose RSA (set your own capabilities)
-    S) Toggle the sign capability
-    E) Toggle the encrypt capability
-    A) Toggle the authentificate capability
-    Q) Finished
+Next we remove Sign and Authenticate capability, keep only Certify.
 
-    What keysize do you want? (2048) 4096
-    Key is valid for? (0) 5y
-    Is this correct? (y/N) y
+```txt
+ (S) Toggle the sign capability
 
-    You need a user ID to identify your key; the software constructs the user ID
-    from the Real Name, Comment and Email Address in this form:
-    "Heinrich Heine (Der Dichter) <heinrichh@duesseldorf.de>"
+Your selection? S
+Current allowed actions: Certify
 
-    Real name: Alice
-    Email address: alice@protonmail.com
-    Comment:
-    You selected this USER-ID:
+ (Q) Finished
+
+Your selection? Q
+```
+Next we select a strong cipher, Curve 25519 or RSA 4096.
+
+```txt
+Please select which elliptic curve you want:
+  (1) Curve 25519
+Your selection? 1
+Please specify how long the key should be valid.
+Key is valid for? (0) 5y
+Is this correct? (y/N) y
+```
+
+And choose bellow an email address active with your name.
+
+```txt
+GnuPG needs to construct a user ID to identify your key.
+Real name: Alice
+Email address: alice@protonmail.com
+Comment:
+You selected this USER-ID:
     "Alice <alice@protonmail.com>"
 
-    Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
-    You need a Passphrase to protect your secret key
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+You need a Passphrase to protect your secret key
     Enter passphrase: <Alice's long passphrase>
     Repeat passphrase: <Alice's long passphrase>
 ```
-If need help to create a secure password, try `diceware` [method](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/)
+If need help to create a secure password, try the [diceware](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/) method.
 
 ## Change ciphers
 
@@ -54,16 +70,16 @@ Use a strong cipher preferences:
 
     $ gpg --edit-key alice
 
-```
+```txt
 gpg> setpref SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP
-  Set preference list to:
+Set preference list to:
   Cipher: AES256, AES192, AES, CAST5, 3DES
   Digest: SHA512, SHA384, SHA256, SHA224, SHA1
   Compression: ZLIB, BZIP2, ZIP, Uncompressed
   Features: MDC, Keyserver no-modify
-  Really update the preferences? (y/N) y
+Really update the preferences? (y/N) y
 
-  You need a passphrase to unlock the secret key for
+You need a passphrase to unlock the secret key for
   user: "Alice <alice@domain.com>"
 
   Enter passphrase: <Alice long passphrase>
@@ -77,39 +93,81 @@ Now, we will create subkey for signing (S), encrypt (E) and authentificate (A).
     $ gpg --expert --edit-key alice
 
 ```
-> addkey
-    (8) RSA (set your own capabilities)
-    Current allowed actions: Sign Encrypt 
+gpg> addkey
+  (11) ECC (set your own capabilities)
+Your selection? 11
+Current allowed actions: Sign Encrypt 
 
-    (S) Toggle the encrypt capability
-    (a) Toggle Authentificate capability
-    'Current allowed actions: Sign'
-    (q) Finished
-    What keysize do you want? 4096 
-    Key is valid for? 6m
-    (y)
+  (S) Toggle the encrypt capability
+  (A) Toggle Authentificate capability
+
+Current allowed actions: Sign
+Your selection? Q
+Please select which elliptic curve you want:
+  (1) Curve 25519
+Your selection? 1
+Key is valid for? 6m
+Is this correct? y
+Really create? y
 
 > addkey
-    (8) RSA (set your own capabilities)
-    (s) Toggle Sign Capability
-    Current allowed actions: Encrypt  
-    (q) Finished
-    What keysize do you want? 4096
-    Key is valid for? 6m
-    (y) 
+  (12) ECC (encrypt only)
+Your selection? 12
+Please select which elliptic curve you want:
+  (1) Curve 25519
+Your selection? 1
+Key is valid for? 6m
+Is this correct? y
+Really create? y 
 
 > addkey (last for authentification)
-    (s) Toggle the sign capability
-    (e) Toggle the encrypt capability
-    (a) Toggle the authentificate capability
-    Current allowed actions: Authenticate
-    (q) Finished
-    What keysize do you want? 4096
-    Key is valid for? 6m
-    (y)
+  (11) ECC (set your own capabilities)
+Your selection? 11
+Current allowed actions: Sign
+  
+  (S) Toggle the sign authenticate capability
 
-> save
+Your selection? S
+Current allowed actions: 
 
+  (A) Toggle the authenticate capability
+
+Your selection? A
+Current allowed actions:  Authenticate
+
+   (Q) Finished
+
+Your selection? Q
+Please select which elliptic curve you want:
+  (1) Curve 25519
+Your selection? 1
+Key is valid for? 6m
+Is this correct? y
+Really create? y
+```
+
+In resume, you have one key for each action:
+
+```txt
+sec ed25519/0x<new key id>
+    created: 2018-12-13 expire: 2023-12-12 usage: C
+    trust: ultimate validity: ultimate
+ssb ed25519/0x<new key id>
+    created: 2018-12-13 expires: 2019-06-11 usage: S
+    trust: ultimate validity: ultimate
+ssb cv25519/0x<new key id>
+    created: 2018-12-13 expires: 2019-06-11 usage: E
+    trust: ultimate validity: ultimate
+ssb ed25519/0x<new key id>
+    created: 2018-12-13 expires: 2019-06-11 usage: A
+    trust: ultimate validity: ultimate
+[ultimate] (1). alice <alice@protonmail.com>
+```
+
+Save our work.
+
+```txt
+gpg> save
 ```
 
 ## Revocation cert
@@ -121,22 +179,16 @@ Your key has been create, we will create a revocation certificate in case where 
 ```
 Create a revocation certificate for this key? (y/N) y
 Please select the reason for the revocation:
-0 = No reason specified
-1 = Key has been compromised
-2 = Key is superseded
-3 = Key is no longer used
-Q = Cancel
-(Probably you want to select 1 here)
+  0 = No reason specified
 Your decision? 0
 Enter an optional description; end it with an empty line:
 >
 Reason for revocation: No reason specified
 (No description given)
 Is this okay? (y/N) y
-...
+ASCII armored output forced.
 Revocation certificate created.
 ```
-
 ## Backups into Tar archive
 
 Backup your fresh key.
@@ -161,29 +213,26 @@ Now, we have all necessary files, delete original key from actual system.
     $ gpg --delete-secret-keys alice
     $ gpg --delete-keys alice
 
-```
-Press Delete key for each subkey. Verify than output of gpg -K is empty and re-import subkey.
-```
-
+Press *Delete key* for each subkeys. 
 Control than output of `gpg -K` and `gpg -k` do not containt our keys.
 
     $ gpg -K
     $ gpg -k
 
-Now, we will create a lesser keys with less privilege by reimport `subkeys` file.
+Now, we will create a lesser keys with less privilege by reimport our `subkeys` file.
 
     $ gpg --import subkeys
 
-```
-gpg: key 32D49659: secret key imported
-gpg: key 32D49659: "Alice <alice@domain.com>" 1 new signature
+```txt
+gpg: key <key id>: public key "alice <alice@protonmail.com" imported
+gpg: key <key id>: secret key imported
 gpg: Total number processed: 1
 gpg: new signatures: 1
 gpg: secret keys read: 1
 gpg: secret keys imported: 1
 ```
 
-Clean `subkeys` file.
+Clean the `subkeys` file.
 
     $ shred -u subkeys
 
@@ -192,12 +241,12 @@ Verify than the master signing key is missing (contain `sec#`):
     $ gpg -K
 
 ```
-sec#  rsa4096/0x0FF123FF123FF123 2017-02-25 [C] [expire : 2019-02-25]
+sec#  ed25519/0x<key id> 2018-12-13 [C] [expire : 2023-12-12]
 Fingerprint of key  = 346E BDED 037B 1949 013D  3576 0F15 D984 5548 7B76
-uid                  [  ultimate ] Alice <alice@protonmail.com>
-ssb   rsa4096/0x123F234555FFF3FA 2017-02-25 [S] [expire : 2017-08-24]
-ssb   rsa4096/0x65FFBB38E24C1BFB 2017-02-25 [E] [expire : 2017-08-24]
-ssb   rsa4096/0x45FD80474C2BB4FC 2017-02-25 [A] [expire : 2017-08-24]
+uid                  [ unknown ] Alice <alice@protonmail.com>
+ssb   ed25519/0x<key id> 2018-12-13 [S] [expire : 2019-06-11]
+ssb   cv25519/0x<key id> 2018-12-13 [E] [expire : 2019-06-11]
+ssb   ed25519/0x<key id> 2018-12-13 [A] [expire : 2019-06-11]
 ```
 
 The first line with 'sec#' means that the secret key is not usable (you cannot create revocation certificate, change password with this key and other things).
