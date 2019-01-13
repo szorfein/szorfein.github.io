@@ -57,24 +57,28 @@ Change keyboard layout for non-english
     # loadkeys fr
     # timedatectl set-ntp true
 
-Partition ArchLinux.raw, the name on qemu is vda bellow sda.
+Partition ArchLinux.raw, the name on qemu is vda bellow sda.  
+I just following the archlinux of the guide for BIOS system.  
+Partition 1 = boot, 2 = system, 3 = swap.
 
     # gdisk /dev/vda
-        n # partition 1 [enter], from beginning [enter], [+2M], code [EF02]
-        n # partition 2 [enter], from beginning [enter], [+256M], code [enter]
+        n # partition 1 [enter], from beginning [enter], [+1M], code [EF02]
+        n # partition 2 [enter], from beginning [enter], [-256M], code [enter]
         n # partition 3 [enter], from beginning [enter], [enter], code [enter]
         w
 
 Format with ext4, not need a better filesystem.
 
     # mkfs.ext4 /dev/vda2
-    # mkfs.ext4 /dev/vda3
+
+And the swap.
+
+    # mkswap /dev/vda3   
+    # swapon /dev/vda3
 
 Set mountpoint.
 
-    # mount /dev/vda3 /mnt
-    # mkdir /mnt/boot
-    # mount /dev/vda2 /mnt/boot
+    # mount /dev/vda2 /mnt
 
 Install base system, fstab and chroot on.
 
@@ -86,13 +90,21 @@ Base configuration:
 
     # ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
     # hwclock --systohc
-    # echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen
+    # echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
     # locale-gen
-    # echo "LANG=fr_FR.UTF-8" > /etc/locale.conf
-    # echo "LC_COLLATE=C" >> /etc/locale.conf
-    # echo "KEYMAP=fr-latin9" > /etc/vconsole.conf
+    # echo "LANG=en_US.UTF-8" > /etc/locale.conf
+    # echo "KEYMAP=fr" > /etc/vconsole.conf
     # echo "archvm" > /etc/hostname
-    # echo "127.0.1.1	archvm.localdomain	archvm" >> /etc/hosts
+
+The network:
+
+    # nano /etc/hosts
+
+```txt
+127.0.0.1	localhost
+::1 localhost
+127.0.0.1 archvm.localdomain	archvm
+```
 
 Install grub as bootloader:
 
