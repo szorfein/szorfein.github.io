@@ -102,6 +102,17 @@ You have to compile all i686 programs you need.
     # emerge -auvDN @world
     # emerge -av wine-staging lutris
 
+## Recreate your home dir
+If you use zsh, you have to install:
+
+    # emerge -av zsh
+
+Your home dir is normally void, so:
+
+    # mkdir /home/username
+    # chown -R username:username /home/username
+    # su username
+
 ## Script
 Finally, we can write a little script:
 
