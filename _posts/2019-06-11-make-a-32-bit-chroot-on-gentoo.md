@@ -11,7 +11,7 @@ comments: true
 If you use a `no-multilib` profile and want for example use wine to play, you should install a 32 bit environment.
 
 ## KERNEL SOURCE
-If not alrealy enable, allow 32 bit binaries to run:
+If not alrealy enable, allow 32 bit binaries to run, for a kernel `>= 4.19.40`:
 
     Binary Emulations --->
     [*] IA32 Emulation
@@ -59,7 +59,7 @@ Else, create a basic directory:
 
 Unpack the stage 3:
 
-    # tar xvJpf stage3-*.tar.{bz2,xz} --xattrs-include='*.*' --numeric-owner
+    # tar xvJpf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
     # rm stage3*
 
 ## Copy the necessary files
@@ -100,6 +100,14 @@ To verify the 32-bit environment:
 You have to compile all i686 programs you need.
 
     # emerge -auvDN @world
+
+The sound driver too, e.g with `ALSA`:
+
+    # emerge -av tap-plugins swh-plugins libsamplerate ladspa-cmt caps-plugins ladspa-bs2b alsa-plugins
+
+And wine-staging, lutris:
+
+    # echo "app-emulation/wine-staging openal gstreamer gecko" > /etc/portage/package.use/wine
     # emerge -av wine-staging lutris
 
 ## Recreate your home dir
@@ -109,9 +117,9 @@ If you use zsh, you have to install:
 
 Your home dir is normally void, so:
 
-    # mkdir /home/username
-    # chown -R username:username /home/username
-    # su username
+    # mkdir /home/<username>
+    # chown -R <username>:<username> /home/<username>
+    # su <username>
 
 ## Script
 Finally, we can write a little script:
@@ -154,13 +162,13 @@ stop() {
 }
 
 if [[ $1 == "start" ]] ; then
-  echo "call with start : $1";
-  start;
-  xhost local:localhost;
+  echo "call with start : $1"
+  start
+  xhost local:localhost
   exit 0
 elif [[ $1 == "stop" ]] ; then
-  echo "call with stop : $1";
-  stop;
+  echo "call with stop : $1"
+  stop
   exit 0
 else
   echo "need arg start or stop";
