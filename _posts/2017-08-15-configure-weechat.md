@@ -35,7 +35,7 @@ You can create a password with `pwgen` like this: `pwgen -sy 24 1`.
 
 Keep your email address private:
 
-    /msg NickServ SET PRIVATE ON
+    /msg NickServ SET HIDE EMAIL ON
 
 You will receive in your mail box, a command line to enter bellow like:
 
