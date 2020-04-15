@@ -82,7 +82,7 @@ Set mountpoint.
 
 Install base system, fstab and chroot on.
 
-    # pacstrap /mnt base
+    # pacstrap /mnt base linux linux-firmware
     # genfstab -U /mnt >> /mnt/etc/fstab
     # arch-chroot /mnt
 
