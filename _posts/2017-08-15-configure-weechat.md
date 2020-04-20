@@ -1,7 +1,7 @@
 ---
 layout: post-detail
 title: weechat + Tor + SASL
-date: 2017-08-19
+date: 2020-04-21
 categories: weechat tor
 description: Configure weechat with tor+SASL & secure password
 img-url: https://i.imgur.com/vOCpUA9m.png
@@ -33,40 +33,35 @@ You can create a password with `pwgen` like this: `pwgen -sy 24 1`.
 
     /msg NickServ REGISTER password ninja@ninja.co
 
-Keep your email address private:
-
-    /msg NickServ SET HIDE EMAIL ON
-
 You will receive in your mail box, a command line to enter bellow like:
 
     /msg NickServ VERIFY REGISTER ninja ijgimopaoijv
 
-Next, to enable TOR, we will using the `SASL EXTERNAL` method.
+Next, to enable TOR, we will using the `SASL` method.
 
-# Enable SASL EXTERNAL
+# Enable SASL authentication 
 
-Create a new certificate TLS. [ref](https://freenode.net/kb/answer/certfp)
+Create the new key. [ref](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_sasl_ecdsa_nist256p_challenge) 
 
 ```sh
 $ mkdir ~/.weechat/certs
 $ cd ~/.weechat/certs
-$ openssl req -x509 -new -newkey rsa:4096 -sha256 -days 1000 -nodes -out freenode.pem -keyout freenode.pem
+$ openssl ecparam -genkey -name prime256v1 -out ~/.weechat/certs/ecdsa.pem
 ```
 
-Find sha1sum fingerprint.
+Find the fingerprint.
 
-    $ openssl x509 -in freenode.pem -outform der | sha1sum -b | cut -d' ' -f1
+    $ openssl ec -noout -text -conv_form compressed -in ~/.weechat/certs/ecdsa.pem | grep '^pub:' -A 3 | tail -n 3 | tr -d ' \n:' | xxd -r -p | base64
       e084219c214d391a8fd75cdbb891b5b966515db7
 
-Into weechat, we switch to ssl.
+Into weechat, we enable SASL.
 
 ```sh
-/msg nickserv cert add e084219c214d391a8fd75cdbb891b5b966515db7
-/set irc.server.freenode.ssl_priorities "NORMAL:-VERS-TLS-ALL:+VERS-TLS1.0:+VERS-SSL3.0:%COMPAT"
-/set irc.server.freenode.ssl_cert "%h/certs/freenode.pem"
-/set irc.server.freenode.sasl_mechanism external
-/set irc.server.freenode.ssl on
-/set irc.server.freenode.addresses "chat.freenode.net/6697"
+/msg nickserv set pubkey e084219c214d391a8fd75cdbb891b5b966515db7
+/set irc.server.freenode.sasl_mechanism ecdsa-nist256p-challenge
+/set irc.server.freenode.sasl_username "ninja"
+/set irc.server.freenode.sasl_key "%h/certs/ecdsa.pem"
+
 /reconnect freenode
 ```
 
@@ -74,10 +69,10 @@ You should be reconnect with your username.
 
 # Tor
 
-Finally, to use tor. (tor should run)
+Finally, to use tor. (tor should run) [ref](https://www.weechat.org/files/doc/stable/weechat_user.en.html#irc_tor_freenode)
 
 ```sh
-/set irc.server.freenode.addresses "freenodeok2gncmy.onion/7000"
+/set irc.server.freenode.addresses "ajnvpgl6prmkb7yktvue6im5wiedlz2w32uhcwaamdiecdrfpwwgnlqd.onion"
 /proxy add tor socks5 127.0.0.1 9050
 /set irc.server.freenode.proxy "tor"
 ```
