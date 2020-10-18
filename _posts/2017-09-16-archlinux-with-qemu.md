@@ -96,20 +96,10 @@ Base configuration:
     # echo "KEYMAP=fr" > /etc/vconsole.conf
     # echo "archvm" > /etc/hostname
 
-The network:
-
-    # nano /etc/hosts
-
-```txt
-127.0.0.1	localhost
-::1 localhost
-127.0.0.1 archvm.localdomain	archvm
-```
-
 Install grub as bootloader:
 
     # pacman -S grub
-    # grub-install --target=i386-pc /dev/vda
+    # grub-install /dev/vda
     # grub-mkconfig -o /boot/grub/grub.cfg
 
 Set your new password before turning off the vm.
@@ -124,3 +114,26 @@ And shutdown.
 # Restart with our script
 
     $ archvm
+
+# Configure the network
+With systemd, create a file for the DHCP:
+
+    # cat > /etc/systemd/network/50-dhcp.network
+    [Match]
+    Name=en*
+
+    [Network]
+    DHCP=yes
+    ^D
+
+And another file for DNS query:
+
+    # cat >> /etc/systemd/resolved.conf
+    [Resolve]
+    DNS = 1.1.1.1
+
+Start them:
+
+    # systemctl start systemd-networkd
+    # systemctl start systemd-resolved
+

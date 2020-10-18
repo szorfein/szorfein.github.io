@@ -39,6 +39,14 @@ My repository contain the necessary to install zfs-lts and somes script i need t
 Copy the `releng` directory from archlinux to build our custome image.
 
     # cp -r /usr/share/archiso/configs/releng archlive
+    # cd archlive
+    # vim pacman.conf
+    [archzfs]
+    Server = https://archzfs.com/$repo/$arch
+
+Edit the `packages.x86_64` to include the good kernel, add:
+
+    archzfs-linux
 
 And update somes files with my repository.
 
@@ -48,24 +56,23 @@ And update somes files with my repository.
 
 Before build iso, you need import the gpg key for `pacman` from [archzfs](https://github.com/archzfs/archzfs/wiki#using-the-archzfs-repository).
 
-    # pacman-key -r 5E1ABF240EE7A126
-    # pacman-key --lsign-key 5E1ABF240EE7A126
+    # pacman-key -r DDF7DB817396A49B2A2723F7403BD972F75D9D76 --keyserver hkp://pool.sks-keyservers.net:80
+    # pacman-key --lsign-key DDF7DB817396A49B2A2723F7403BD972F75D9D76 --keyserver hkp://pool.sks-keyservers.net:80
     # pacman -Syy
 
 # Build ISO
 
-    # mkdir archlive/out/
     # cd archlive
-    # ./build.sh -v
+    # mkarchiso -v -o out .
 
 # Rebuild ISO
 
 If you need rebuild iso, then, do it:
 
     # cd archlive
-    # rm -v work/build.make_*
+    # rm -v work/*
 
-And rebuild iso normally with `./build.sh -v`.
+And rebuild iso normally.
 
 # Retrieve the iso from qemu image
 
