@@ -96,9 +96,9 @@ Base configuration:
     # echo "KEYMAP=fr" > /etc/vconsole.conf
     # echo "archvm" > /etc/hostname
 
-Install grub as bootloader:
+Install grub as bootloader with few tools:
 
-    # pacman -S grub
+    # pacman -S grub vim
     # grub-install /dev/vda
     # grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -131,6 +131,7 @@ And another file for DNS query:
     # cat >> /etc/systemd/resolved.conf
     [Resolve]
     DNS = 1.1.1.1
+    ^D
 
 Start them:
 
