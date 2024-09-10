@@ -311,21 +311,32 @@ If you need share key with friend or post on the web, generate a file like this:
 
     $ gpg --armor --output key.txt --export alice
 
-## Send key to `keyserver.sks`
+## Send key to `keys.openpgp.org`
+Updated chapter (thx Basil Peace) (ref: https://keys.openpgp.org./about/usage#gnupg).  
 
-You have to search your key ID, this is a last 8 fingerprint character, `55487B76` here.
+openpgp.org associate email with your gpg key, you can't use this service
+without email address.
 
-    $ gpg -k
-      Fingerprint of key  = 346E BDED 037B 1949 013D  3576 0F15 D984 5548 7B76
+    $ gpg --export alice@protonmail.com | curl -T - https://keys.openpgp.org
+    Key successfully uploaded. Proceed with verification here:
+    https://keys.openpgp.org/upload/<long_long_string_here>
 
-    $ gpg --keyserver sks.keyservers.net --send-keys 55487B76
+After clicking the link, you'll need to click on a 'verification email'.  
+If it doesn't work, export your key.
 
-When people search your key, they type that:
+    $ gpg --export alice@protonmail.com > my_key.pub
 
-    $ gpg -keyserver sks.keyservers.net --search-keys alice@protonmail.com
+And go to the [upload page](https://keys.openpgp.org./upload).
+
+When people search your key, they can type that:
+
+    $ gpg --keyserver hkps://keys.openpgp.org --search-keys alice@protonmail.com
+
+or with TOR:
+
+    $ gpg --keyserver hkp://zkaan2xfbuxia2wpf7ofnkbz6r5zdbbvxbunvp5g2iebopbfc4iqmbad.onion --search-keys alice@protonmail.com
 
 If the list contains many key, you have to compare the fingerprint.
-
 
 ## When you are compromised
 
@@ -382,11 +393,9 @@ sub   rsa4096/0x45FD80474C2BB4FC 2017-02-25 [A] [expire : 2017-08-24]
 > quit
 ```
 
-You have to send each subkeys to `sks.keyserver.net`
+You have to send your updated subkeys to `keys.openpgp.org`
 
-    $ gpg --keyserver sks.keyservers.net --send-keys 123F234555FFF3FA
-    $ gpg --keyserver sks.keyservers.net --send-keys 65FFBB38E24C1BFB
-    $ gpg --keyserver sks.keyservers.net --send-keys 45FD80474C2BB4FC
+    $ gpg --export alice@protonmail.com | curl -T - https://keys.openpgp.org
     $ rm revoked_keys.asc
 
 That's it.
